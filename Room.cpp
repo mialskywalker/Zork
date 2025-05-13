@@ -7,5 +7,5 @@ Room::~Room() {}
 
 void Room::addExit(Entity* exit) {
 	if (exit->getType() == Type::EXIT)
-		getContains().push_back(std::move(exit));
+		getContains().push_back(exit);
 }

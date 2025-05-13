@@ -36,6 +36,17 @@ public:
 	const string& getDescription() const;
 
 	list<Entity*>& getContains();
+
+	// Methods
+
+	virtual void add(Entity* entity);
+	
+	//virtual void destroy(Entity* entity);
+
+	//virtual void remove(Entity* entity);
+
+	void listEntities() const;
+
 };
 
 #endif

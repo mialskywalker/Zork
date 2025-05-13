@@ -12,6 +12,8 @@ public:
 	Room(Room&&) = default;
 	Room& operator=(Room&&) = default;
 
+	// Methods
+
 	void addExit(Entity* exit);
 
 };
