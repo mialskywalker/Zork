@@ -6,7 +6,7 @@
 
 using namespace std;
 
-enum Type {
+enum class Type {
 	CREATURE,
 	EXIT,
 	ROOM,
@@ -20,7 +20,7 @@ class Entity {
 	list<Entity*> contains;
 
 public:
-	Entity(const Type type, const string name, const string description);
+	Entity(const Type type, const string& name, const string& description);
 	virtual ~Entity();
 	Entity(const Entity&) = delete;
 	Entity& operator=(const Entity&) = delete;

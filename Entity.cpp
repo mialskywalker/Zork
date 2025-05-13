@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-Entity::Entity(const Type type, const string name, const string description) :
+Entity::Entity(const Type type, const string& name, const string& description) :
 	type(type),
 	name(name),
 	description(description) { }
