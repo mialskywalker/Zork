@@ -2,15 +2,9 @@
 #define __EXIT__
 
 #include "Entity.h"
+#include "Globals.h"
 
 class Room;
-
-enum class Direction {
-	EAST,
-	WEST,
-	NORTH,
-	SOUTH
-};
 
 class Exit : public Entity {
 	Direction direction;

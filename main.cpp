@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Room.h"
 #include "Exit.h"
+#include "Player.h"
 
 int main() {
 
@@ -19,7 +20,23 @@ int main() {
 
 	room->listEntities();
 	room2->listEntities();
-	
+
+	Player player;
+	player.setCurrentRoom(room);
+	cout << player.getRoom()->getName() << endl;
+
+
+
+	player.move(Direction::EAST);
+	cout << player.getRoom()->getName() << endl;
+
+	player.move(Direction::NORTH);
+	cout << player.getRoom()->getName() << endl;
+
+	player.move(Direction::SOUTH);
+	cout << player.getRoom()->getName() << endl;
+
+
 	delete room2;
 	delete room;
 

@@ -3,15 +3,9 @@
 
 #include <string>
 #include <list>
+#include "Globals.h"
 
 using namespace std;
-
-enum class Type {
-	CREATURE,
-	EXIT,
-	ROOM,
-	ITEM
-};
 
 class Entity {
 	Type type;
