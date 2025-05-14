@@ -19,7 +19,7 @@ public:
 
 	const string& getStat() const;
 
-	int getAmount();
+	int getAmount() const;
 
 	void useItem(Player* player);
 };

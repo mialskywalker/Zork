@@ -3,9 +3,12 @@
 #include "Room.h"
 #include "Exit.h"
 #include "Potion.h"
+#include "Weapon.h"
 
 Player::Player() :
-	Creature("Player", "A great adventurer!") { }
+	Creature("Player", "A great adventurer!") {
+	currentWeapon = nullptr;
+}
 
 Player::~Player() {}
 
@@ -43,7 +46,7 @@ void Player::use(const string& itemName) {
 
 	if (auto potion = dynamic_cast<Potion*>(item)) {
 		potion->useItem(this);
-		this->remove(item);
+		remove(item);
 	}
 	else if (item) {
 		cout << "You can't use that item." << endl;
@@ -57,7 +60,7 @@ void Player::take(const string& itemName) {
 	for (auto& i : this->currentRoom->getContains()) {
 		if (auto item = dynamic_cast<Item*>(i)) {
 			if (item->getName() == itemName) {
-				this->add(item);
+				add(item);
 				cout << item->getName() << " added to inventory!" << endl;
 				this->currentRoom->remove(i);
 				return;
@@ -70,12 +73,81 @@ void Player::take(const string& itemName) {
 void Player::drop(const string& itemName) {
 	Entity* item = getItem(itemName);
 
+	if (item->getDescription() == "Weapon") {
+		unequip(item->getName());
+	}
+
 	if (item != nullptr) {
 		this->currentRoom->add(item);
 		cout << item->getName() << " dropped!" << endl;
-		this->remove(item);
+		remove(item);
 	}
 	else {
 		cout << "I don't have that item." << endl;
 	}
+}
+
+void Player::equip(const string& itemName) {
+	Entity* item = getItem(itemName);
+	
+	if (item->getDescription() == "Weapon") {
+		if (auto weapon = dynamic_cast<Weapon*>(item)) {
+			if (!weapon->getEquipped()) {
+				if (currentWeapon != nullptr) {
+					unequip(currentWeapon->getName());
+				}
+				weapon->equipItem();
+				setAttackPower(getAttackPower() + weapon->getDamage());
+				currentWeapon = weapon;
+				cout << "Equipped: " << itemName << endl;
+			}
+			else {
+				cout << "Item is already equipped!" << endl;
+			}
+		}
+		else {
+			cout << "Item not found!" << endl;
+		}
+	}
+	else {
+		cout << "Item not equippable!" << endl;
+	}
+}
+
+void Player::unequip(const string& itemName) {
+	Entity* item = getItem(itemName);
+
+	if (item->getDescription() == "Weapon") {
+		if (auto weapon = dynamic_cast<Weapon*>(item)) {
+			if (weapon->getEquipped()) {
+				if (currentWeapon == nullptr) {
+					cout << "Item not equipped!" << endl;
+				}
+				else {
+					weapon->unequipItem();
+					setAttackPower(getAttackPower() - weapon->getDamage());
+					currentWeapon = nullptr;
+					cout << "Unequipped: " << itemName << endl;
+				}
+
+			}
+			else {
+				cout << "Item not equipped!" << endl;
+			}
+		}
+		else {
+			cout << "Item not found!" << endl;
+		}
+	}
+	else {
+		cout << "Item not equipped!" << endl;
+	}
+}
+
+void Player::showStatus() {
+	cout << "-----------------------------------" << endl;
+	cout << "HP: " << this->getHealth() << endl;
+	cout << "Attack Power: " << this->getAttackPower() << endl;
+	cout << "Armor: " << this->getArmor() << endl;
+	cout << "-----------------------------------" << endl;
 }

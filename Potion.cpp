@@ -11,7 +11,7 @@ Potion::~Potion() {}
 
 const string& Potion::getStat() const { return this->stat; }
 
-int Potion::getAmount() { return this->amount; }
+int Potion::getAmount() const { return this->amount; }
 
 void Potion::useItem(Player* player) {
 	if (getStat() == "HP") {

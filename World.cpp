@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "NPC.h"
 #include "Potion.h"
+#include "Weapon.h"
 
 World::World() {
 	isRunning = true;
@@ -51,9 +52,9 @@ void World::setUpWorld() {
 	addEntity(zvezdi);
 
 	Potion* hp = new Potion("Health Potion", "Potion", "HP", 20);
-	Item* item = new Item("Asd", "asd");
+	Weapon* sword = new Weapon("Sword", "Weapon", 50);
 	addEntity(hp);
-	addEntity(item);
+	addEntity(sword);
 
 	Room* room = new Room("Entrance", "Intro room");
 	Room* room2 = new Room("Hallway", "Second room");
@@ -67,13 +68,12 @@ void World::setUpWorld() {
 
 	room->add(gosho);
 	room->add(hp);
-	room->add(item);
+	room->add(sword);
 	room->addExit(northExit);
 	room2->addExit(southExit);
 	room2->add(zvezdi);
 
 	player = new Player();
-	player->setHealth(100);
 	player->setCurrentRoom(room);
 	addEntity(player);
 
@@ -160,8 +160,16 @@ void World::processCommand(const string& input) {
 		string itemName = getCommandArgs(iss);
 		player->use(itemName);
 	}
-	else if (command == "stats") {
-		cout << player->getHealth() << endl;
+	else if (command == "equip") {
+		string itemName = getCommandArgs(iss);
+		player->equip(itemName);
+	}
+	else if (command == "unequip") {
+		string itemName = getCommandArgs(iss);
+		player->unequip(itemName);
+	}
+	else if (command == "status") {
+		player->showStatus();
 	}
 	else if (command == "quit") {
 		isRunning = false;

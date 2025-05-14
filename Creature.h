@@ -6,8 +6,10 @@
 class Room;
 
 class Creature : public Entity {
-	Room* location = nullptr;
 	int health;
+	int attackPower;
+	int armor;
+	int baseDamage;
 
 public:
 	Creature(const string& name, const string& description);
@@ -21,7 +23,17 @@ public:
 
 	int getHealth() const;
 
+	int getAttackPower() const;
+
+	int getArmor() const;
+
+	int getDamage() const;
+
 	void setHealth(int amount);
+
+	void setAttackPower(int amount);
+
+	void setArmor(int amount);
 
 	// Methods
 

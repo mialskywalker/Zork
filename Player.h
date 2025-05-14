@@ -4,7 +4,10 @@
 #include "Creature.h"
 #include "Globals.h"
 
+class Weapon;
+
 class Player : public Creature {
+	Weapon* currentWeapon;
 public:
 	Room* currentRoom = nullptr;
 
@@ -29,6 +32,12 @@ public:
 	void take(const string& itemName);
 
 	void drop(const string& itemName);
+
+	void equip(const string& itemName);
+
+	void unequip(const string& itemName);
+
+	void showStatus();
 
 };
 
