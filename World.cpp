@@ -4,6 +4,7 @@
 #include "Room.h"
 #include "Exit.h"
 #include "Player.h"
+#include "NPC.h"
 
 World::World() {
 	isRunning = true;
@@ -44,8 +45,10 @@ void World::run() {
 }
 
 void World::setUpWorld() {
-	Entity* e = new Entity(Type::CREATURE, "Example", "Some Description");
-	addEntity(e);
+	NPC* gosho = new NPC("Gosho", "Friendly", "Thank godness you're alive!");
+	NPC* zvezdi = new NPC("Zvezdi", "Friendly", "Hello, traveller!");
+	addEntity(gosho);
+	addEntity(zvezdi);
 
 	Room* room = new Room("Entrance", "Intro room");
 	Room* room2 = new Room("Hallway", "Second room");
@@ -57,9 +60,10 @@ void World::setUpWorld() {
 	addEntity(northExit);
 	addEntity(southExit);
 
-	room->add(e);
+	room->add(gosho);
 	room->addExit(northExit);
 	room2->addExit(southExit);
+	room2->add(zvezdi);
 
 	player = new Player();
 	player->setCurrentRoom(room);
@@ -95,6 +99,21 @@ void World::processCommand(const string& input) {
 		else {
 			cout << "You can't go that way!" << endl;
 		}
+	}
+	else if (command == "talk") {
+		iss >> arg;
+		bool isValidNPC = false;
+		for (const auto& e : player->currentRoom->getContains()) {
+			if (auto npc = dynamic_cast<NPC*>(e)) {
+				if (npc->getName() == arg)
+				{
+					isValidNPC = true;
+					cout << npc->getName() << ": " << npc->getDialogue() << endl;
+				}
+			}
+		}
+		if (!isValidNPC)
+			cout << arg << " is not currently here." << endl;
 	}
 	else if (command == "quit") {
 		isRunning = false;
