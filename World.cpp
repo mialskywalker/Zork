@@ -51,7 +51,9 @@ void World::setUpWorld() {
 	addEntity(zvezdi);
 
 	Potion* hp = new Potion("Health Potion", "Potion", "HP", 20);
+	Item* item = new Item("Asd", "asd");
 	addEntity(hp);
+	addEntity(item);
 
 	Room* room = new Room("Entrance", "Intro room");
 	Room* room2 = new Room("Hallway", "Second room");
@@ -65,6 +67,7 @@ void World::setUpWorld() {
 
 	room->add(gosho);
 	room->add(hp);
+	room->add(item);
 	room->addExit(northExit);
 	room2->addExit(southExit);
 	room2->add(zvezdi);
@@ -147,49 +150,15 @@ void World::processCommand(const string& input) {
 	}
 	else if (command == "take") {
 		string itemName = getCommandArgs(iss);
-		bool taken = false;
-		for (auto& i : player->currentRoom->getContains()) {
-			if (auto item = dynamic_cast<Item*>(i)) {
-				if (item->getName() == itemName) {
-					player->add(item);
-					cout << item->getName() << " added to inventory!" << endl;
-					taken = true;
-					player->currentRoom->remove(i);
-					return;
-				}
-			}			
-		}
-		if (!taken)
-			cout << "I can't find that item." << endl;
+		player->take(itemName);
 	}
 	else if (command == "drop") {
 		string itemName = getCommandArgs(iss);
-		bool dropped = false;
-		for (auto& i : player->getContains()) {
-			if (i->getName() == itemName) {
-				player->currentRoom->add(i);
-				cout << i->getName() << " dropped!" << endl;
-				dropped = true;
-				player->remove(i);
-				return;
-			}
-		}
-		if (!dropped)
-			cout << "I don't have that item." << endl;
+		player->drop(itemName);
 	}
 	else if (command == "use") {
 		string itemName = getCommandArgs(iss);
-		bool itemFound = false;
-		for (auto& i : player->getContains()) {
-			if (i->getName() == itemName) {
-				itemFound = true;
-				if (i->getDescription() == "Potion") {
-					player->use(itemName);
-					player->remove(i);
-					return;
-				}
-			}
-		}
+		player->use(itemName);
 	}
 	else if (command == "stats") {
 		cout << player->getHealth() << endl;

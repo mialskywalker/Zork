@@ -22,7 +22,13 @@ public:
 
 	void move(const Direction& direction);
 
+	Entity* getItem(const string& name);
+
 	void use(const string& itemName);
+
+	void take(const string& itemName);
+
+	void drop(const string& itemName);
 
 };
 
