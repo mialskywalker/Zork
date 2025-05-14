@@ -2,6 +2,7 @@
 #define __WORLD__
 
 #include <vector>
+#include <sstream>
 
 using namespace std;
 
@@ -28,6 +29,8 @@ public:
 	void run();
 
 	void setUpWorld();
+
+	string getCommandArgs(istringstream& iss);
 
 	void processCommand(const string& input);
 

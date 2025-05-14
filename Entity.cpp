@@ -7,8 +7,6 @@ Entity::Entity(const Type type, const string& name, const string& description) :
 	description(description) { }
 
 Entity::~Entity() {
-	for (Entity* e : contains)
-		delete e;
 	contains.clear();
 }
 
@@ -23,6 +21,15 @@ list<Entity*>& Entity::getContains() { return this->contains; }
 void Entity::add(Entity* entity) {
 	if (entity->getType() != Type::EXIT) {
 		contains.push_back(std::move(entity));
+	}
+}
+
+void Entity::remove(Entity* entity) {
+	for (auto it = contains.begin(); it != contains.end(); ++it) {
+		if (*it == entity) {
+			contains.erase(it);
+			break;
+		}
 	}
 }
 

@@ -2,9 +2,12 @@
 #include "Player.h"
 #include "Room.h"
 #include "Exit.h"
+#include "Potion.h"
 
 Player::Player() :
 	Creature("Player", "A great adventurer!") { }
+
+Player::~Player() {}
 
 const Room* Player::getRoom() const { return this->currentRoom; }
 
@@ -24,4 +27,13 @@ void Player::move(const Direction& direction) {
 		}
 	}
 	cout << "You can't go that way!" << endl;
+}
+
+void Player::use(const string& itemName) {
+	for (const auto& i : getContains()) {
+		if (i->getDescription() == "Potion" && i->getName() == itemName) {
+			Potion* potion = dynamic_cast<Potion*>(i);
+			potion->useItem(this);
+		}
+	}
 }

@@ -37,7 +37,7 @@ public:
 	
 	//virtual void destroy(Entity* entity);
 
-	//virtual void remove(Entity* entity);
+	virtual void remove(Entity* entity);
 
 	void listEntities() const;
 

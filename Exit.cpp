@@ -6,10 +6,7 @@ Exit::Exit(const string& name, const string& description, Room* source, Room* de
 	destination(destination),
 	direction(direction) { }
 
-Exit::~Exit() {
-	delete source;
-	delete destination;
-}
+Exit::~Exit() { }
 
 Room* Exit::getSource() const { return this->source; }
 

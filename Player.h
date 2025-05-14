@@ -10,6 +10,8 @@ public:
 
 	Player();
 
+	~Player();
+
 	// Getters and Setters
 
 	const Room* getRoom() const;
@@ -19,6 +21,9 @@ public:
 	// Methods
 
 	void move(const Direction& direction);
+
+	void use(const string& itemName);
+
 };
 
 #endif

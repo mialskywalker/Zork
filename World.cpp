@@ -1,10 +1,10 @@
 #include <iostream>
-#include <sstream>
 #include "World.h"
 #include "Room.h"
 #include "Exit.h"
 #include "Player.h"
 #include "NPC.h"
+#include "Potion.h"
 
 World::World() {
 	isRunning = true;
@@ -50,6 +50,9 @@ void World::setUpWorld() {
 	addEntity(gosho);
 	addEntity(zvezdi);
 
+	Potion* hp = new Potion("Health Potion", "Potion", "HP", 20);
+	addEntity(hp);
+
 	Room* room = new Room("Entrance", "Intro room");
 	Room* room2 = new Room("Hallway", "Second room");
 	addEntity(room);
@@ -61,14 +64,32 @@ void World::setUpWorld() {
 	addEntity(southExit);
 
 	room->add(gosho);
+	room->add(hp);
 	room->addExit(northExit);
 	room2->addExit(southExit);
 	room2->add(zvezdi);
 
 	player = new Player();
+	player->setHealth(100);
 	player->setCurrentRoom(room);
 	addEntity(player);
 
+}
+
+string World::getCommandArgs(istringstream& iss) {
+	bool bFirst = true;
+	string res = "";
+	string arg;
+	while (iss >> arg) {
+		if (bFirst) {
+			res += arg;
+			bFirst = false;
+		}
+		else {
+			res += ' ' + arg;
+		}
+	}
+	return res;
 }
 
 void World::processCommand(const string& input) {
@@ -100,12 +121,21 @@ void World::processCommand(const string& input) {
 			cout << "You can't go that way!" << endl;
 		}
 	}
+	else if (command == "inventory") {
+		if (player->getContains().size()) {
+			for (const auto& i : player->getContains())
+				cout << "- " << i->getName() << " (" << i->getDescription() << ")" << endl;
+		}
+		else {
+			cout << "Inventory is empty!" << endl;
+		}
+	}
 	else if (command == "talk") {
-		iss >> arg;
+		string npcName = getCommandArgs(iss);
 		bool isValidNPC = false;
 		for (const auto& e : player->currentRoom->getContains()) {
 			if (auto npc = dynamic_cast<NPC*>(e)) {
-				if (npc->getName() == arg)
+				if (npc->getName() == npcName)
 				{
 					isValidNPC = true;
 					cout << npc->getName() << ": " << npc->getDialogue() << endl;
@@ -113,7 +143,56 @@ void World::processCommand(const string& input) {
 			}
 		}
 		if (!isValidNPC)
-			cout << arg << " is not currently here." << endl;
+			cout << npcName << " is not currently here." << endl;
+	}
+	else if (command == "take") {
+		string itemName = getCommandArgs(iss);
+		bool taken = false;
+		for (auto& i : player->currentRoom->getContains()) {
+			if (auto item = dynamic_cast<Item*>(i)) {
+				if (item->getName() == itemName) {
+					player->add(item);
+					cout << item->getName() << " added to inventory!" << endl;
+					taken = true;
+					player->currentRoom->remove(i);
+					return;
+				}
+			}			
+		}
+		if (!taken)
+			cout << "I can't find that item." << endl;
+	}
+	else if (command == "drop") {
+		string itemName = getCommandArgs(iss);
+		bool dropped = false;
+		for (auto& i : player->getContains()) {
+			if (i->getName() == itemName) {
+				player->currentRoom->add(i);
+				cout << i->getName() << " dropped!" << endl;
+				dropped = true;
+				player->remove(i);
+				return;
+			}
+		}
+		if (!dropped)
+			cout << "I don't have that item." << endl;
+	}
+	else if (command == "use") {
+		string itemName = getCommandArgs(iss);
+		bool itemFound = false;
+		for (auto& i : player->getContains()) {
+			if (i->getName() == itemName) {
+				itemFound = true;
+				if (i->getDescription() == "Potion") {
+					player->use(itemName);
+					player->remove(i);
+					return;
+				}
+			}
+		}
+	}
+	else if (command == "stats") {
+		cout << player->getHealth() << endl;
 	}
 	else if (command == "quit") {
 		isRunning = false;
