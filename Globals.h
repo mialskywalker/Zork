@@ -12,6 +12,13 @@ enum class Type {
 	CREATURE,
 	EXIT,
 	ROOM,
-	ITEM
+	ITEM,
+};
+
+enum class ItemTypes {
+	POTION,
+	ARMOR,
+	WEAPON,
+	BASE
 };
 #endif

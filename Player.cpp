@@ -18,7 +18,7 @@ Player::Player() :
 
 Player::~Player() {}
 
-const Room* Player::getRoom() const { return this->currentRoom; }
+Room* Player::getRoom() const { return this->currentRoom; }
 
 void Player::setCurrentRoom(Room* room) {
 	this->currentRoom = room;
@@ -60,13 +60,24 @@ Entity* Player::getCreature(const string& name) {
 	return nullptr;
 }
 
+void Player::listInventory() {
+	if (getContains().size()) {
+		cout << "You are carrying:" << endl;
+		for (const auto& i : getContains())
+			cout << "- " << i->getName() << " (" << i->getDescription() << ")" << endl;
+	}
+	else {
+		cout << "You aren't carrying anything!" << endl;
+	}
+}
+
 void Player::move(const Direction& direction) {
 	for (Entity* e : currentRoom->getContains()) {
 		if (e->getType() == Type::EXIT) {
 			Exit* exit = static_cast<Exit*>(e);
 			if (exit->getDirection() == direction) {
-				currentRoom = exit->getDestination();
-				cout << "You move to " << currentRoom->getName() << endl;
+				setCurrentRoom(exit->getDestination());
+				cout << "You move to " << getRoom()->getName() << endl;
 				return;
 			}
 		}
@@ -95,7 +106,7 @@ void Player::take(const string& itemName) {
 			if (item->getName() == itemName) {
 				add(item);
 				cout << item->getName() << " added to inventory!" << endl;
-				this->currentRoom->remove(i);
+				getRoom()->remove(i);
 				return;
 			}
 		}
@@ -104,14 +115,14 @@ void Player::take(const string& itemName) {
 }
 
 void Player::drop(const string& itemName) {
-	Entity* item = getItem(itemName);
+	Item* item = dynamic_cast<Item*>(getItem(itemName));
 
-	if (item->getDescription() == "Weapon" || item->getDescription() == "Armor") {
+	if (item->getEquipped()) {
 		unequip(item->getName());
 	}
 
 	if (item != nullptr) {
-		this->currentRoom->add(item);
+		getRoom()->add(item);
 		cout << item->getName() << " dropped!" << endl;
 		remove(item);
 	}
@@ -121,18 +132,18 @@ void Player::drop(const string& itemName) {
 }
 
 void Player::equip(const string& itemName) {
-	Entity* item = getItem(itemName);
+	Item* item = dynamic_cast<Item*>(getItem(itemName));
 
 	if (!item) {
 		cout << "Item not found!" << endl;
 		return;
 	}
 	
-	if (item->getDescription() == "Weapon") {
+	if (item->getItemType() == ItemTypes::WEAPON) {
 		Weapon* weapon = dynamic_cast<Weapon*>(item);
 
 		if (weapon->getReqLevel() > getLevel()) {
-			cout << "Your level is too low to equip that!" << endl;
+			cout << "You need to be level " << weapon->getReqLevel() << " to equip this item!" << endl;
 			return;
 		}
 
@@ -149,11 +160,11 @@ void Player::equip(const string& itemName) {
 			cout << "Item is already equipped!" << endl;
 		}
 	}
-	else if (item->getDescription() == "Armor") {
+	else if (item->getItemType() == ItemTypes::ARMOR) {
 		Armor* armor = dynamic_cast<Armor*>(item);
 
 		if (armor->getReqLevel() > getLevel()) {
-			cout << "Your level is too low to equip that!" << endl;
+			cout << "You need to be level " << armor->getReqLevel() << " to equip this item!" << endl;
 			return;
 		}
 
@@ -176,14 +187,14 @@ void Player::equip(const string& itemName) {
 }
 
 void Player::unequip(const string& itemName) {
-	Entity* item = getItem(itemName);
+	Item* item = dynamic_cast<Item*>(getItem(itemName));
 
 	if (!item) {
 		cout << "Item not found!" << endl;
 		return;
 	}
 
-	if (item->getDescription() == "Weapon") {
+	if (item->getItemType() == ItemTypes::WEAPON) {
 		Weapon* weapon = dynamic_cast<Weapon*>(item);
 
 		if (weapon->getEquipped()) {
@@ -196,7 +207,7 @@ void Player::unequip(const string& itemName) {
 			cout << "Item not equipped!" << endl;
 		}
 	}
-	else if (item->getDescription() == "Armor") {
+	else if (item->getItemType() == ItemTypes::ARMOR) {
 		Armor* armor = dynamic_cast<Armor*>(item);
 
 		if (armor->getEquipped()) {
@@ -246,7 +257,7 @@ void Player::attack(const string& enemyName) {
 	cout << " damage!" << endl;
 	if (!enemy->isAlive()) {
 		cout << "You defeated " << enemy->getName() << endl;
-		enemy->drop(currentRoom);
+		enemy->drop(getRoom());
 		gainXP(enemy->getXPYield(), enemyLevelDifference);
 		currentRoom->remove(creature);
 		return;

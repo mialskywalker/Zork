@@ -1,7 +1,7 @@
 #include "Weapon.h"
 
 Weapon::Weapon(const string& name, const string& description, const int damage, const int reqLevel) :
-	Item(name, description),
+	Item(name, ItemTypes::WEAPON, description),
 	damage(damage),
 	reqLevel(reqLevel) {
 	this->equipped = false;

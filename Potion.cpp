@@ -3,7 +3,7 @@
 #include "Player.h"
 
 Potion::Potion(const string& name, const string& description, const string& stat, int amount) :
-	Item(name, description),
+	Item(name, ItemTypes::POTION, description),
 	stat(stat),
 	amount(amount) { }
 

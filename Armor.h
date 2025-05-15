@@ -21,6 +21,7 @@ public:
 	void equipItem();
 
 	void unequipItem();
+
 };
 
 #endif

@@ -68,7 +68,7 @@ void World::setUpWorld() {
 	addEntity(orc1);
 	addEntity(orc2);
 
-	Potion* hp = new Potion("Health Potion", "Potion", "HP", 20);
+	Potion* hp = new Potion("Health Potion", "Potion", "HP", 0);
 	Weapon* sword = new Weapon("Sword", "Weapon", 50, 1);
 	Weapon* axe = new Weapon("Axe", "Weapon", 70, 2);
 	Armor* helmet = new Armor("Iron Helm", "Armor", 110, 1);
@@ -82,7 +82,7 @@ void World::setUpWorld() {
 
 	orc1->add(axe);
 
-	Room* room = new Room("Entrance", "Intro room");
+	Room* room = new Room("Entrance", "This is an open field");
 	Room* room2 = new Room("Hallway", "Second room");
 	addEntity(room);
 	addEntity(room2);
@@ -132,9 +132,10 @@ void World::processCommand(const string& input) {
 	iss >> command;
 
 	if (command == "look") {
-		cout << "You are in: " << player->currentRoom->getName() << endl;
+		cout << player->getRoom()->getName() << endl;
+		cout << player->getRoom()->getDescription() << endl;
 		cout << "You see:" << endl;
-		player->currentRoom->listEntities();
+		player->getRoom()->listEntities();
 	}
 	else if (command == "go") {
 		iss >> arg;
@@ -156,18 +157,12 @@ void World::processCommand(const string& input) {
 		}
 	}
 	else if (command == "inventory") {
-		if (player->getContains().size()) {
-			for (const auto& i : player->getContains())
-				cout << "- " << i->getName() << " (" << i->getDescription() << ")" << endl;
-		}
-		else {
-			cout << "Inventory is empty!" << endl;
-		}
+		player->listInventory();
 	}
 	else if (command == "talk") {
 		string npcName = getCommandArgs(iss);
 		bool isValidNPC = false;
-		for (const auto& e : player->currentRoom->getContains()) {
+		for (const auto& e : player->getRoom()->getContains()) {
 			if (auto npc = dynamic_cast<NPC*>(e)) {
 				if (npc->getName() == npcName)
 				{

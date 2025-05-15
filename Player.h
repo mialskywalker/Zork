@@ -23,7 +23,7 @@ public:
 
 	// Getters and Setters
 
-	const Room* getRoom() const;
+	Room* getRoom() const;
 
 	void setCurrentRoom(Room* room);
 
@@ -39,11 +39,13 @@ public:
 
 	void setMaxHealth(int amount);
 
-	// Methods
-
 	Entity* getItem(const string& name);
 
 	Entity* getCreature(const string& name);
+
+	// Methods
+
+	void listInventory();
 
 	void move(const Direction& direction);
 

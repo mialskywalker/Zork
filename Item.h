@@ -4,13 +4,20 @@
 #include "Entity.h"
 
 class Item : public Entity {
+	ItemTypes itemType;
 public:
-	Item(const string& name, const string& description);
+	Item(const string& name, ItemTypes itemType, const string& description);
 	~Item() override;
 	Item(const Item&) = delete;
 	Item& operator=(const Item&) = delete;
 	Item(Item&&) = default;
 	Item& operator=(Item&&) = default;
+
+
+	virtual bool getEquipped() const { return false; }
+
+	const ItemTypes& getItemType() const;
+
 };
 
 #endif
