@@ -26,9 +26,11 @@ public:
 
 	// Methods
 
-	void move(const Direction& direction);
-
 	Entity* getItem(const string& name);
+
+	Entity* getCreature(const string& name);
+
+	void move(const Direction& direction);
 
 	void use(const string& itemName);
 
@@ -41,6 +43,8 @@ public:
 	void unequip(const string& itemName);
 
 	void showStatus();
+
+	void attack(const string& enemyName);
 
 };
 

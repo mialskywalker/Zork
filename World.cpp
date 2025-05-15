@@ -40,6 +40,8 @@ void World::run() {
 	cout << "Welcome to the world of adventure!" << endl;
 
 	while (isRunning) {
+		if (!player->isAlive())
+			break;
 		cout << endl << ">> ";
 		string input;
 		getline(cin, input);
@@ -50,17 +52,22 @@ void World::run() {
 void World::setUpWorld() {
 	NPC* gosho = new NPC("Gosho", "Friendly", "Thank godness you're alive!");
 	NPC* zvezdi = new NPC("Zvezdi", "Friendly", "Hello, traveller!");
-	Enemy* orc = new Enemy("Orc", 50, 10);
+	Enemy* orc = new Enemy("Orc", 50, 150);
 	addEntity(gosho);
 	addEntity(zvezdi);
 	addEntity(orc);
 
 	Potion* hp = new Potion("Health Potion", "Potion", "HP", 20);
 	Weapon* sword = new Weapon("Sword", "Weapon", 50);
-	Armor* helmet = new Armor("Ancient Helm of Dominance", "Armor", 110);
+	Weapon* axe = new Weapon("Axe", "Weapon", 70);
+	Armor* helmet = new Armor("Iron Helm", "Armor", 110);
+	Armor* bracers = new Armor("Iron Bracers", "Armor", 75);
+
 	addEntity(hp);
 	addEntity(sword);
 	addEntity(helmet);
+	addEntity(axe);
+	addEntity(bracers);
 
 	Room* room = new Room("Entrance", "Intro room");
 	Room* room2 = new Room("Hallway", "Second room");
@@ -76,6 +83,8 @@ void World::setUpWorld() {
 	room->add(hp);
 	room->add(sword);
 	room->add(helmet);
+	room->add(bracers);
+	room->add(axe);
 	room->addExit(northExit);
 	room2->addExit(southExit);
 	room2->add(zvezdi);
@@ -178,6 +187,10 @@ void World::processCommand(const string& input) {
 	}
 	else if (command == "status") {
 		player->showStatus();
+	}
+	else if (command == "attack") {
+		string enemyName = getCommandArgs(iss);
+		player->attack(enemyName);
 	}
 	else if (command == "quit") {
 		isRunning = false;

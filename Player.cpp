@@ -5,6 +5,7 @@
 #include "Potion.h"
 #include "Weapon.h"
 #include "Armor.h"
+#include "Enemy.h"
 
 Player::Player() :
 	Creature("Player", "A great adventurer!") {
@@ -20,6 +21,24 @@ void Player::setCurrentRoom(Room* room) {
 	this->currentRoom = room;
 }
 
+Entity* Player::getItem(const string& name) {
+	for (const auto& i : getContains()) {
+		if (i->getName() == name) {
+			return i;
+		}
+	}
+	return nullptr;
+}
+
+Entity* Player::getCreature(const string& name) {
+	for (const auto& c : currentRoom->getContains()) {
+		if (c->getName() == name) {
+			return c;
+		}
+	}
+	return nullptr;
+}
+
 void Player::move(const Direction& direction) {
 	for (Entity* e : currentRoom->getContains()) {
 		if (e->getType() == Type::EXIT) {
@@ -32,15 +51,6 @@ void Player::move(const Direction& direction) {
 		}
 	}
 	cout << "You can't go that way!" << endl;
-}
-
-Entity* Player::getItem(const string& name) {
-	for (const auto& i : getContains()) {
-		if (i->getName() == name) {
-			return i;
-		}
-	}
-	return nullptr;
 }
 
 void Player::use(const string& itemName) {
@@ -91,43 +101,40 @@ void Player::drop(const string& itemName) {
 
 void Player::equip(const string& itemName) {
 	Entity* item = getItem(itemName);
+
+	if (!item) {
+		cout << "Item not found!" << endl;
+		return;
+	}
 	
 	if (item->getDescription() == "Weapon") {
-		if (auto weapon = dynamic_cast<Weapon*>(item)) {
-			if (!weapon->getEquipped()) {
-				if (currentWeapon != nullptr) {
-					unequip(currentWeapon->getName());
-				}
-				weapon->equipItem();
-				setAttackPower(getAttackPower() + weapon->getDamage());
-				currentWeapon = weapon;
-				cout << "Equipped: " << itemName << endl;
+		Weapon* weapon = dynamic_cast<Weapon*>(item);
+		if (!weapon->getEquipped()) {
+			if (currentWeapon != nullptr) {
+				unequip(currentWeapon->getName());
 			}
-			else {
-				cout << "Item is already equipped!" << endl;
-			}
+			weapon->equipItem();
+			setAttackPower(getAttackPower() + weapon->getDamage());
+			currentWeapon = weapon;
+			cout << "Equipped: " << itemName << endl;
 		}
 		else {
-			cout << "Item not found!" << endl;
+			cout << "Item is already equipped!" << endl;
 		}
 	}
 	else if (item->getDescription() == "Armor") {
-		if (auto armor = dynamic_cast<Armor*>(item)) {
-			if (!armor->getEquipped()) {
-				if (currentArmor != nullptr) {
-					unequip(currentArmor->getName());
-				}
-				armor->equipItem();
-				setArmor(getArmor() + armor->getArmor());
-				currentArmor = armor;
-				cout << "Equipped: " << itemName << endl;
+		Armor* armor = dynamic_cast<Armor*>(item);
+		if (!armor->getEquipped()) {
+			if (currentArmor != nullptr) {
+				unequip(currentArmor->getName());
 			}
-			else {
-				cout << "Item is already equipped!" << endl;
-			}
+			armor->equipItem();
+			setArmor(getArmor() + armor->getArmor());
+			currentArmor = armor;
+			cout << "Equipped: " << itemName << endl;
 		}
 		else {
-			cout << "Item not found!" << endl;
+			cout << "Item is already equipped!" << endl;
 		}
 	}
 	else {
@@ -138,52 +145,39 @@ void Player::equip(const string& itemName) {
 void Player::unequip(const string& itemName) {
 	Entity* item = getItem(itemName);
 
-	if (item->getDescription() == "Weapon") {
-		if (auto weapon = dynamic_cast<Weapon*>(item)) {
-			if (weapon->getEquipped()) {
-				if (currentWeapon == nullptr) {
-					cout << "Item not equipped!" << endl;
-				}
-				else {
-					weapon->unequipItem();
-					setAttackPower(getAttackPower() - weapon->getDamage());
-					currentWeapon = nullptr;
-					cout << "Unequipped: " << itemName << endl;
-				}
+	if (!item) {
+		cout << "Item not found!" << endl;
+		return;
+	}
 
-			}
-			else {
-				cout << "Item not equipped!" << endl;
-			}
+	if (item->getDescription() == "Weapon") {
+		Weapon* weapon = dynamic_cast<Weapon*>(item);
+
+		if (weapon->getEquipped()) {
+			weapon->unequipItem();
+			setAttackPower(getAttackPower() - weapon->getDamage());
+			currentWeapon = nullptr;
+			cout << "Unequipped: " << itemName << endl;
 		}
 		else {
-			cout << "Item not found!" << endl;
+			cout << "Item not equipped!" << endl;
 		}
 	}
 	else if (item->getDescription() == "Armor") {
-		if (auto armor = dynamic_cast<Armor*>(item)) {
-			if (armor->getEquipped()) {
-				if (currentArmor == nullptr) {
-					cout << "Item not equipped!" << endl;
-				}
-				else {
-					armor->unequipItem();
-					setArmor(getArmor() - armor->getArmor());
-					currentArmor = nullptr;
-					cout << "Unequipped: " << itemName << endl;
-				}
+		Armor* armor = dynamic_cast<Armor*>(item);
 
-			}
-			else {
-				cout << "Item not equipped!" << endl;
-			}
+		if (armor->getEquipped()) {
+			armor->unequipItem();
+			setArmor(getArmor() - armor->getArmor());
+			currentArmor = nullptr;
+			cout << "Unequipped: " << itemName << endl;
 		}
 		else {
-			cout << "Item not found!" << endl;
+			cout << "Item not equipped!" << endl;
 		}
 	}
 	else {
-		cout << "Item not equipped!" << endl;
+		cout << "Invalid item." << endl;
 	}
 }
 
@@ -193,4 +187,38 @@ void Player::showStatus() {
 	cout << "Attack Power: " << this->getAttackPower() << endl;
 	cout << "Armor: " << this->getArmor() << endl;
 	cout << "-----------------------------------" << endl;
+}
+
+void Player::attack(const string& enemyName) {
+	Entity* creature = getCreature(enemyName);
+
+	if (!creature) {
+		cout << "You don't have a target!" << endl;
+		return;
+	}
+
+	if (creature->getDescription() != "Hostile") {
+		cout << "You can't attack that target!" << endl;
+		return;
+	}
+
+	Enemy* enemy = dynamic_cast<Enemy*>(creature);
+	int amount = enemy->takeDamage(getDamage());
+	cout << "You hit the " << enemy->getName() << " (";
+	cout << enemy->getHealth() << "HP) for " << amount;
+	cout << " damage!" << endl;
+	if (!enemy->isAlive()) {
+		cout << "You defeated " << enemy->getName() << endl;
+		currentRoom->remove(creature);
+		return;
+	}
+	else {
+		amount = takeDamage(enemy->getDamage());
+		cout << "The " << enemy->getName() << " hits you (";
+		cout << getHealth() << " HP) back for " << amount;
+		cout << " damage!" << endl;
+		if (!isAlive()) {
+			cout << "You have been slain!" << endl;
+		}
+	}
 }

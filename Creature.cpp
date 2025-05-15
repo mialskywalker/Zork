@@ -1,4 +1,5 @@
 #include "Creature.h"
+#include "time.h"
 
 Creature::Creature(const string& name, const string& description) :
 	Entity(Type::CREATURE, name, description) {
@@ -11,7 +12,11 @@ Creature::Creature(const string& name, const string& description) :
 Creature::~Creature() {
 }
 
-int Creature::getHealth() const { return this->health; }
+int Creature::getHealth() const { 
+	if (this->health <= 0)
+		return 0;
+	return this->health;
+}
 
 int Creature::getAttackPower() const { return this->attackPower; }
 
@@ -33,4 +38,11 @@ void Creature::setArmor(int amount) {
 
 bool Creature::isAlive() const {
 	return getHealth() > 0;
+}
+
+int Creature::takeDamage(int amount) {
+	srand(time(0));
+	int damageAmount = amount + (rand() % amount - (armor / 100));
+	setHealth(getHealth() - damageAmount);
+	return damageAmount;
 }

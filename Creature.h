@@ -38,6 +38,9 @@ public:
 	// Methods
 
 	bool isAlive() const;
+
+	int takeDamage(int amount);
+
 };
 
 #endif
