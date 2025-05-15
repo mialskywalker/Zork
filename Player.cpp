@@ -8,7 +8,7 @@
 #include "Enemy.h"
 
 Player::Player() :
-	Creature("Player", "A great adventurer!") {
+	Creature(CreatureTypes::PLAYER, "Player", "A great adventurer!") {
 	currentWeapon = nullptr;
 	currentArmor = nullptr;
 	xp = 0;
@@ -74,7 +74,7 @@ void Player::listInventory() {
 void Player::move(const Direction& direction) {
 	for (Entity* e : currentRoom->getContains()) {
 		if (e->getType() == Type::EXIT) {
-			Exit* exit = static_cast<Exit*>(e);
+			Exit* exit = dynamic_cast<Exit*>(e);
 			if (exit->getDirection() == direction) {
 				setCurrentRoom(exit->getDestination());
 				cout << "You move to " << getRoom()->getName() << endl;
@@ -234,14 +234,14 @@ void Player::showStatus() {
 }
 
 void Player::attack(const string& enemyName) {
-	Entity* creature = getCreature(enemyName);
+	Creature* creature = dynamic_cast<Creature*>(getCreature(enemyName));
 
 	if (!creature) {
 		cout << "You don't have a target!" << endl;
 		return;
 	}
 
-	if (creature->getDescription() != "Hostile") {
+	if (creature->getCreatureType() != CreatureTypes::ENEMY) {
 		cout << "You can't attack that target!" << endl;
 		return;
 	}

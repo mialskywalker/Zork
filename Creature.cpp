@@ -1,7 +1,8 @@
 #include "Creature.h"
 #include "time.h"
 
-Creature::Creature(const string& name, const string& description) :
+Creature::Creature(CreatureTypes creatureType, const string& name, const string& description) :
+	creatureType(creatureType),
 	Entity(Type::CREATURE, name, description) {
 	this->health = 100;
 	this->attackPower = 0;
@@ -42,6 +43,8 @@ void Creature::setArmor(int amount) {
 void Creature::setLevel(int lvl) {
 	this->level = lvl;
 }
+
+const CreatureTypes& Creature::getCreatureType() const { return this->creatureType; }
 
 bool Creature::isAlive() const {
 	return getHealth() > 0;

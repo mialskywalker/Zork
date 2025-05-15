@@ -1,12 +1,12 @@
 #ifndef __ENEMY__
 #define __ENEMY__
 
-#include "NPC.h"
+#include "Creature.h"
 
-class Enemy : public NPC {
+class Enemy : public Creature {
 	int xpYield;
 public:
-	Enemy(const string& name, int hp, int attackPower);
+	Enemy(const string& name, const string& description, int hp, int attackPower);
 	~Enemy() override;
 
 	int getXPYield() const;

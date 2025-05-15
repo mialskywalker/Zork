@@ -50,45 +50,35 @@ void World::run() {
 }
 
 void World::setUpWorld() {
-	NPC* gosho = new NPC("Gosho", "Friendly", "Thank godness you're alive!");
-	NPC* zvezdi = new NPC("Zvezdi", "Friendly", "Hello, traveller!");
-	Enemy* orc = new Enemy("Orc", 50, 150);
-	Enemy* orc1 = new Enemy("Orc1", 50, 150);
-	Enemy* orc2 = new Enemy("Orc2", 50, 150);
+	NPC* gosho = new NPC("hooded figure", "A hooded figure leans calmly against the wall, their eyes kind but alert - clearly not a threat.", "Thank godness you're alive!");
+	Enemy* orc = new Enemy("orc", "A hulking orc snarls in your direction, gripping a crude blade. Fresh blood drips from its tusks.", 50, 150);
+
 
 	orc->setLevel(5);
 	orc->setXPYield(150);
-	orc1->setLevel(1);
-	orc1->setXPYield(150);
-	orc2->setLevel(1);
-	orc2->setXPYield(150);
 	addEntity(gosho);
-	addEntity(zvezdi);
 	addEntity(orc);
-	addEntity(orc1);
-	addEntity(orc2);
 
-	Potion* hp = new Potion("Health Potion", "Potion", "HP", 0);
-	Weapon* sword = new Weapon("Sword", "Weapon", 50, 1);
-	Weapon* axe = new Weapon("Axe", "Weapon", 70, 2);
-	Armor* helmet = new Armor("Iron Helm", "Armor", 110, 1);
-	Armor* bracers = new Armor("Iron Bracers", "Armor", 75, 2);
+	Potion* hp = new Potion("vial", "A small glass vial filled with crimson liquid pulses faintly, as if alive - clearly meant to restore vitality.", "HP", 0);
+	Weapon* sword = new Weapon("sword", "A slightly rusted longsword lies on the ground behind the chair, its hilt still faintly warm to the touch.", 50, 1);
+	Weapon* axe = new Weapon("axe", "A heavy iron axe rests against the wall, its blade chipped but still deadly from countless battles.", 70, 2);
+	Armor* helmet = new Armor("helmet", "A dented iron helmet sits atop a crate, its visor cracked but still capable of offering some protection.", 110, 1);
+	Armor* bracers = new Armor("bracers", "Worn leather bracers lay folded near a torn sack, stained with sweat and scorched from old spells.", 75, 2);
 
 	addEntity(hp);
 	addEntity(sword);
 	addEntity(helmet);
 	addEntity(axe);
 	addEntity(bracers);
-
-	orc1->add(axe);
+	orc->add(axe);
 
 	Room* room = new Room("Entrance", "This is an open field");
 	Room* room2 = new Room("Hallway", "Second room");
 	addEntity(room);
 	addEntity(room2);
 
-	Exit* northExit = new Exit("North Door", "Exit", room, room2, Direction::NORTH);
-	Exit* southExit = new Exit("South Door", "Exit", room2, room, Direction::SOUTH);
+	Exit* northExit = new Exit("north", "To the north, dense trees form a shadowy forest. The wind rustles the leaves with a whisper, hinting at secrets hidden beneath the canopy.", room, room2, Direction::NORTH);
+	Exit* southExit = new Exit("south", "To the south, cracked stone pillars rise from the earth - remnants of some forgotten structure cloaked in dust and silence.", room2, room, Direction::SOUTH);
 	addEntity(northExit);
 	addEntity(southExit);
 
@@ -99,10 +89,7 @@ void World::setUpWorld() {
 	room->add(bracers);
 	room->addExit(northExit);
 	room2->addExit(southExit);
-	room2->add(zvezdi);
 	room->add(orc);
-	room->add(orc1);
-	room->add(orc2);
 
 	player = new Player();
 	player->setCurrentRoom(room);

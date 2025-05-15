@@ -36,6 +36,6 @@ void Entity::remove(Entity* entity) {
 void Entity::listEntities() const {
 	if (this->contains.size()) {
 		for (const auto& c : this->contains)
-			cout << "- " << c->getName() << " (" << c->getDescription() << ")" << endl;
+			cout << "- " << c->getDescription() << " (" << c->getName() << ")" << endl;
 	}
 }

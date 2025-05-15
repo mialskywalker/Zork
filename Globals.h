@@ -21,4 +21,10 @@ enum class ItemTypes {
 	WEAPON,
 	BASE
 };
+
+enum class CreatureTypes {
+	FRIENDLY,
+	ENEMY,
+	PLAYER
+};
 #endif

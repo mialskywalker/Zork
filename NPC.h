@@ -15,6 +15,7 @@ public:
 	NPC& operator=(NPC&&) = default;
 
 	const string& getDialogue() const;
+
 };
 
 #endif

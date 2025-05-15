@@ -2,8 +2,8 @@
 #include "Enemy.h"
 #include "Room.h"
 
-Enemy::Enemy(const string& name, int hp, int attackPower) :
-	NPC(name, "Hostile", "") {
+Enemy::Enemy(const string& name, const string& description, int hp, int attackPower) :
+	Creature(CreatureTypes::ENEMY, name, description) {
 	setHealth(hp);
 	setAttackPower(attackPower);
 	setXPYield(10);

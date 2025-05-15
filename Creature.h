@@ -11,9 +11,10 @@ class Creature : public Entity {
 	int armor;
 	int baseDamage;
 	int level;
+	CreatureTypes creatureType;
 
 public:
-	Creature(const string& name, const string& description);
+	Creature(CreatureTypes creatureType, const string& name, const string& description);
 	~Creature() override;
 	Creature(const Creature&) = delete;
 	Creature& operator=(const Creature&) = delete;
@@ -40,11 +41,14 @@ public:
 
 	void setLevel(int lvl);
 
+	const CreatureTypes& getCreatureType() const;
+
 	// Methods
 
 	bool isAlive() const;
 
 	int takeDamage(int amount, int levelDifference);
+
 
 };
 
