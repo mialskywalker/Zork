@@ -5,9 +5,12 @@
 #include "Globals.h"
 
 class Weapon;
+class Armor;
 
 class Player : public Creature {
 	Weapon* currentWeapon;
+	Armor* currentArmor;
+
 public:
 	Room* currentRoom = nullptr;
 

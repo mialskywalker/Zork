@@ -6,6 +6,8 @@
 #include "NPC.h"
 #include "Potion.h"
 #include "Weapon.h"
+#include "Armor.h"
+#include "Enemy.h"
 
 World::World() {
 	isRunning = true;
@@ -48,13 +50,17 @@ void World::run() {
 void World::setUpWorld() {
 	NPC* gosho = new NPC("Gosho", "Friendly", "Thank godness you're alive!");
 	NPC* zvezdi = new NPC("Zvezdi", "Friendly", "Hello, traveller!");
+	Enemy* orc = new Enemy("Orc", 50, 10);
 	addEntity(gosho);
 	addEntity(zvezdi);
+	addEntity(orc);
 
 	Potion* hp = new Potion("Health Potion", "Potion", "HP", 20);
 	Weapon* sword = new Weapon("Sword", "Weapon", 50);
+	Armor* helmet = new Armor("Ancient Helm of Dominance", "Armor", 110);
 	addEntity(hp);
 	addEntity(sword);
+	addEntity(helmet);
 
 	Room* room = new Room("Entrance", "Intro room");
 	Room* room2 = new Room("Hallway", "Second room");
@@ -69,9 +75,11 @@ void World::setUpWorld() {
 	room->add(gosho);
 	room->add(hp);
 	room->add(sword);
+	room->add(helmet);
 	room->addExit(northExit);
 	room2->addExit(southExit);
 	room2->add(zvezdi);
+	room2->add(orc);
 
 	player = new Player();
 	player->setCurrentRoom(room);

@@ -4,10 +4,12 @@
 #include "Exit.h"
 #include "Potion.h"
 #include "Weapon.h"
+#include "Armor.h"
 
 Player::Player() :
 	Creature("Player", "A great adventurer!") {
 	currentWeapon = nullptr;
+	currentArmor = nullptr;
 }
 
 Player::~Player() {}
@@ -73,7 +75,7 @@ void Player::take(const string& itemName) {
 void Player::drop(const string& itemName) {
 	Entity* item = getItem(itemName);
 
-	if (item->getDescription() == "Weapon") {
+	if (item->getDescription() == "Weapon" || item->getDescription() == "Armor") {
 		unequip(item->getName());
 	}
 
@@ -109,6 +111,25 @@ void Player::equip(const string& itemName) {
 			cout << "Item not found!" << endl;
 		}
 	}
+	else if (item->getDescription() == "Armor") {
+		if (auto armor = dynamic_cast<Armor*>(item)) {
+			if (!armor->getEquipped()) {
+				if (currentArmor != nullptr) {
+					unequip(currentArmor->getName());
+				}
+				armor->equipItem();
+				setArmor(getArmor() + armor->getArmor());
+				currentArmor = armor;
+				cout << "Equipped: " << itemName << endl;
+			}
+			else {
+				cout << "Item is already equipped!" << endl;
+			}
+		}
+		else {
+			cout << "Item not found!" << endl;
+		}
+	}
 	else {
 		cout << "Item not equippable!" << endl;
 	}
@@ -127,6 +148,28 @@ void Player::unequip(const string& itemName) {
 					weapon->unequipItem();
 					setAttackPower(getAttackPower() - weapon->getDamage());
 					currentWeapon = nullptr;
+					cout << "Unequipped: " << itemName << endl;
+				}
+
+			}
+			else {
+				cout << "Item not equipped!" << endl;
+			}
+		}
+		else {
+			cout << "Item not found!" << endl;
+		}
+	}
+	else if (item->getDescription() == "Armor") {
+		if (auto armor = dynamic_cast<Armor*>(item)) {
+			if (armor->getEquipped()) {
+				if (currentArmor == nullptr) {
+					cout << "Item not equipped!" << endl;
+				}
+				else {
+					armor->unequipItem();
+					setArmor(getArmor() - armor->getArmor());
+					currentArmor = nullptr;
 					cout << "Unequipped: " << itemName << endl;
 				}
 
