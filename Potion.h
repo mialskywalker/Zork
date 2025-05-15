@@ -21,7 +21,7 @@ public:
 
 	int getAmount() const;
 
-	void useItem(Player* player);
+	bool useItem(Player* player);
 };
 
 #endif

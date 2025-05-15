@@ -1,14 +1,17 @@
 #include "Armor.h"
 
-Armor::Armor(const string& name, const string& description, const int armor) :
+Armor::Armor(const string& name, const string& description, const int armor, const int reqLevel) :
 	Item(name, description),
-	armor(armor) {
+	armor(armor),
+	reqLevel(reqLevel) {
 	this->equipped = false;
 }
 
 Armor::~Armor() {}
 
 int Armor::getArmor() const { return this->armor; }
+
+int Armor::getReqLevel() const { return this->reqLevel; }
 
 bool Armor::getEquipped() const { return this->equipped; }
 

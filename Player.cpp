@@ -11,6 +11,9 @@ Player::Player() :
 	Creature("Player", "A great adventurer!") {
 	currentWeapon = nullptr;
 	currentArmor = nullptr;
+	xp = 0;
+	levelRequiredXp = 100;
+	maxHealth = 100;
 }
 
 Player::~Player() {}
@@ -19,6 +22,24 @@ const Room* Player::getRoom() const { return this->currentRoom; }
 
 void Player::setCurrentRoom(Room* room) {
 	this->currentRoom = room;
+}
+
+int Player::getXP() const { return this->xp; }
+
+void Player::setXP(int amount) {
+	this->xp = amount;
+}
+
+int Player::getLevelRequiredXP() const { return this->levelRequiredXp; }
+
+void Player::setLevelRequiredXP(int amount) {
+	this->levelRequiredXp = amount;
+}
+
+int Player::getMaxHealth() const { return this->maxHealth; }
+
+void Player::setMaxHealth(int amount) {
+	this->maxHealth = amount;
 }
 
 Entity* Player::getItem(const string& name) {
@@ -57,8 +78,8 @@ void Player::use(const string& itemName) {
 	Entity* item = getItem(itemName);
 
 	if (auto potion = dynamic_cast<Potion*>(item)) {
-		potion->useItem(this);
-		remove(item);
+		if (potion->useItem(this))
+			remove(item);
 	}
 	else if (item) {
 		cout << "You can't use that item." << endl;
@@ -109,6 +130,12 @@ void Player::equip(const string& itemName) {
 	
 	if (item->getDescription() == "Weapon") {
 		Weapon* weapon = dynamic_cast<Weapon*>(item);
+
+		if (weapon->getReqLevel() > getLevel()) {
+			cout << "Your level is too low to equip that!" << endl;
+			return;
+		}
+
 		if (!weapon->getEquipped()) {
 			if (currentWeapon != nullptr) {
 				unequip(currentWeapon->getName());
@@ -124,6 +151,12 @@ void Player::equip(const string& itemName) {
 	}
 	else if (item->getDescription() == "Armor") {
 		Armor* armor = dynamic_cast<Armor*>(item);
+
+		if (armor->getReqLevel() > getLevel()) {
+			cout << "Your level is too low to equip that!" << endl;
+			return;
+		}
+
 		if (!armor->getEquipped()) {
 			if (currentArmor != nullptr) {
 				unequip(currentArmor->getName());
@@ -203,22 +236,47 @@ void Player::attack(const string& enemyName) {
 	}
 
 	Enemy* enemy = dynamic_cast<Enemy*>(creature);
-	int amount = enemy->takeDamage(getDamage());
+	bool enemyIsStronger = enemy->getLevel() > getLevel();
+	int enemyLevelDifference = enemy->getLevel() - getLevel();
+	int playerLevelDifference = getLevel() - enemy->getLevel();
+
+	int amount = enemy->takeDamage(getDamage(), playerLevelDifference);
 	cout << "You hit the " << enemy->getName() << " (";
 	cout << enemy->getHealth() << "HP) for " << amount;
 	cout << " damage!" << endl;
 	if (!enemy->isAlive()) {
 		cout << "You defeated " << enemy->getName() << endl;
+		enemy->drop(currentRoom);
+		gainXP(enemy->getXPYield(), enemyLevelDifference);
 		currentRoom->remove(creature);
 		return;
 	}
 	else {
-		amount = takeDamage(enemy->getDamage());
+		amount = takeDamage(enemy->getDamage(), enemyLevelDifference);
 		cout << "The " << enemy->getName() << " hits you (";
 		cout << getHealth() << " HP) back for " << amount;
 		cout << " damage!" << endl;
 		if (!isAlive()) {
 			cout << "You have been slain!" << endl;
 		}
+	}
+}
+
+void Player::gainXP(int amount, int levelDifference) {
+	if (levelDifference < 0)
+		amount /= -levelDifference;
+	else if (levelDifference > 0)
+		amount *= levelDifference;
+	int totalXP = getXP() + amount;
+	setXP(totalXP);
+	cout << "You gained " << amount << "XP!" << endl;
+
+	while (getXP() - getLevelRequiredXP() >= 0) {
+		setLevel(getLevel() + 1);
+		setXP(getXP() - getLevelRequiredXP());
+		setLevelRequiredXP(getLevelRequiredXP() + 50);
+		setMaxHealth(getMaxHealth() + 25);
+		setHealth(getMaxHealth());
+		cout << "You have reached level " << getLevel() << "!" << endl;
 	}
 }

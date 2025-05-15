@@ -53,21 +53,34 @@ void World::setUpWorld() {
 	NPC* gosho = new NPC("Gosho", "Friendly", "Thank godness you're alive!");
 	NPC* zvezdi = new NPC("Zvezdi", "Friendly", "Hello, traveller!");
 	Enemy* orc = new Enemy("Orc", 50, 150);
+	Enemy* orc1 = new Enemy("Orc1", 50, 150);
+	Enemy* orc2 = new Enemy("Orc2", 50, 150);
+
+	orc->setLevel(5);
+	orc->setXPYield(150);
+	orc1->setLevel(1);
+	orc1->setXPYield(150);
+	orc2->setLevel(1);
+	orc2->setXPYield(150);
 	addEntity(gosho);
 	addEntity(zvezdi);
 	addEntity(orc);
+	addEntity(orc1);
+	addEntity(orc2);
 
 	Potion* hp = new Potion("Health Potion", "Potion", "HP", 20);
-	Weapon* sword = new Weapon("Sword", "Weapon", 50);
-	Weapon* axe = new Weapon("Axe", "Weapon", 70);
-	Armor* helmet = new Armor("Iron Helm", "Armor", 110);
-	Armor* bracers = new Armor("Iron Bracers", "Armor", 75);
+	Weapon* sword = new Weapon("Sword", "Weapon", 50, 1);
+	Weapon* axe = new Weapon("Axe", "Weapon", 70, 2);
+	Armor* helmet = new Armor("Iron Helm", "Armor", 110, 1);
+	Armor* bracers = new Armor("Iron Bracers", "Armor", 75, 2);
 
 	addEntity(hp);
 	addEntity(sword);
 	addEntity(helmet);
 	addEntity(axe);
 	addEntity(bracers);
+
+	orc1->add(axe);
 
 	Room* room = new Room("Entrance", "Intro room");
 	Room* room2 = new Room("Hallway", "Second room");
@@ -84,11 +97,12 @@ void World::setUpWorld() {
 	room->add(sword);
 	room->add(helmet);
 	room->add(bracers);
-	room->add(axe);
 	room->addExit(northExit);
 	room2->addExit(southExit);
 	room2->add(zvezdi);
-	room2->add(orc);
+	room->add(orc);
+	room->add(orc1);
+	room->add(orc2);
 
 	player = new Player();
 	player->setCurrentRoom(room);

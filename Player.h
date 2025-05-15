@@ -10,6 +10,9 @@ class Armor;
 class Player : public Creature {
 	Weapon* currentWeapon;
 	Armor* currentArmor;
+	int xp;
+	int levelRequiredXp;
+	int maxHealth;
 
 public:
 	Room* currentRoom = nullptr;
@@ -23,6 +26,18 @@ public:
 	const Room* getRoom() const;
 
 	void setCurrentRoom(Room* room);
+
+	int getXP() const;
+
+	void setXP(int amount);
+
+	int getLevelRequiredXP() const;
+
+	void setLevelRequiredXP(int amount);
+
+	int getMaxHealth() const;
+
+	void setMaxHealth(int amount);
 
 	// Methods
 
@@ -45,6 +60,8 @@ public:
 	void showStatus();
 
 	void attack(const string& enemyName);
+
+	void gainXP(int amount, int levelDifference);
 
 };
 

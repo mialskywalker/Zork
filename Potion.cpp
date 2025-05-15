@@ -13,16 +13,18 @@ const string& Potion::getStat() const { return this->stat; }
 
 int Potion::getAmount() const { return this->amount; }
 
-void Potion::useItem(Player* player) {
+bool Potion::useItem(Player* player) {
 	if (getStat() == "HP") {
-		if (getAmount() + player->getHealth() >= 100) {
-			int currentAmount = 100 - player->getHealth();
-			player->setHealth(100);
+		if (player->getHealth() < player->getMaxHealth()) {
+			int currentAmount = player->getMaxHealth() - player->getHealth();
+			player->setHealth(currentAmount);
 			cout << "Healed for " << currentAmount << "HP" << endl;
+			return true;
 		}
 		else {
-			player->setHealth(player->getHealth() + getAmount());
-			cout << "Healed for " << getAmount() << "HP" << endl;
+			cout << "Health is already full" << endl;
+			return false;
 		}
 	}
+	return false;
 }

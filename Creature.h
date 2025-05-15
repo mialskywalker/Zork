@@ -10,6 +10,7 @@ class Creature : public Entity {
 	int attackPower;
 	int armor;
 	int baseDamage;
+	int level;
 
 public:
 	Creature(const string& name, const string& description);
@@ -29,17 +30,21 @@ public:
 
 	int getDamage() const;
 
+	int getLevel() const;
+
 	void setHealth(int amount);
 
 	void setAttackPower(int amount);
 
 	void setArmor(int amount);
 
+	void setLevel(int lvl);
+
 	// Methods
 
 	bool isAlive() const;
 
-	int takeDamage(int amount);
+	int takeDamage(int amount, int levelDifference);
 
 };
 
