@@ -26,5 +26,16 @@ bool Potion::useItem(Player* player) {
 			return false;
 		}
 	}
+	else if (getStat() == "AttackPower") {
+		player->setAttackPower(player->getAttackPower() + getAmount());
+		cout << "Attack Power increased by " << getAmount() << endl;
+		return true;
+	}
+	else if (getStat() == "Stamina") {
+		player->setMaxHealth(player->getMaxHealth() + getAmount());
+		player->setHealth(player->getMaxHealth());
+		cout << "Max Health increased to " << player->getMaxHealth() << endl;
+		return true;
+	}
 	return false;
 }

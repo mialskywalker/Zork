@@ -78,8 +78,12 @@ void Player::move(const Direction& direction) {
 		if (e->getType() == Type::EXIT) {
 			Exit* exit = dynamic_cast<Exit*>(e);
 			if (exit->getDirection() == direction) {
-				setCurrentRoom(exit->getDestination());
-				cout << "You move to " << getRoom()->getName() << endl;
+				if (!exit->getIsLocked()) {
+					setCurrentRoom(exit->getDestination());
+					cout << "You move to " << getRoom()->getName() << endl;
+					return;
+				}
+				cout << exit->getName() << " is locked. You need to find a key!" << endl;
 				return;
 			}
 		}
@@ -273,6 +277,20 @@ void Player::unlock(const string& name) {
 		cout << "Key not compatible" << endl;
 		return;
 	}
+	else if (auto exit = dynamic_cast<Exit*>(entity)) {
+		int requiredId = exit->getId();
+		for (const auto& i : getContains()) {
+			if (auto key = dynamic_cast<Key*>(i)) {
+				if (key->getId() == requiredId) {
+					exit->unlock(requiredId);
+					return;
+				}
+			}
+		}
+
+		cout << "Key not compatible" << endl;
+		return;
+	}
 
 	cout << "I can't unlock that!" << endl;
 }
@@ -292,6 +310,21 @@ void Player::lock(const string& name) {
 			if (auto key = dynamic_cast<Key*>(i)) {
 				if (key->getId() == requiredId) {
 					chest->lock(requiredId);
+					return;
+				}
+			}
+		}
+
+		cout << "Key not compatible" << endl;
+		return;
+	}
+
+	else if (auto exit = dynamic_cast<Exit*>(entity)) {
+		int requiredId = exit->getId();
+		for (const auto& i : getContains()) {
+			if (auto key = dynamic_cast<Key*>(i)) {
+				if (key->getId() == requiredId) {
+					exit->lock(requiredId);
 					return;
 				}
 			}

@@ -52,8 +52,8 @@ void World::run() {
 }
 
 void World::setUpWorld() {
-	NPC* gosho = new NPC("hooded figure", "A hooded figure leans calmly against the wall, their eyes kind but alert - clearly not a threat.", "Thank godness you're alive!");
-	Enemy* orc = new Enemy("orc", "A hulking orc snarls in your direction, gripping a crude blade. Fresh blood drips from its tusks.", 50, 150);
+	NPC* gosho = new NPC("hooded figure", "", "Thank godness you're alive!");
+	Enemy* orc = new Enemy("orc", "", 50, 150);
 
 
 	orc->setLevel(5);
@@ -61,13 +61,17 @@ void World::setUpWorld() {
 	addEntity(gosho);
 	addEntity(orc);
 
-	Potion* hp = new Potion("vial", "A small glass vial filled with crimson liquid pulses faintly, as if alive - clearly meant to restore vitality.", "HP", 0);
-	Weapon* sword = new Weapon("sword", "A slightly rusted longsword lies on the ground behind the chair, its hilt still faintly warm to the touch.", 50, 1);
-	Weapon* axe = new Weapon("axe", "A heavy iron axe rests against the wall, its blade chipped but still deadly from countless battles.", 70, 2);
-	Armor* helmet = new Armor("helmet", "A dented iron helmet sits atop a crate, its visor cracked but still capable of offering some protection.", 110, 1);
-	Armor* bracers = new Armor("bracers", "Worn leather bracers lay folded near a torn sack, stained with sweat and scorched from old spells.", 75, 2);
+	Potion* hp = new Potion("vial", "", "HP", 0);
+	Potion* atk = new Potion("atk", "", "AttackPower", 20);
+	Potion* stam = new Potion("stam", "", "Stamina", 10);
+	Weapon* sword = new Weapon("sword", "", 50, 1);
+	Weapon* axe = new Weapon("axe", "", 70, 2);
+	Armor* helmet = new Armor("helmet", "", 110, 1);
+	Armor* bracers = new Armor("bracers", "", 75, 2);
 
 	addEntity(hp);
+	addEntity(atk);
+	addEntity(stam);
 	addEntity(sword);
 	addEntity(helmet);
 	addEntity(axe);
@@ -79,20 +83,22 @@ void World::setUpWorld() {
 	addEntity(room);
 	addEntity(room2);
 
-	Exit* northExit = new Exit("north", "To the north, dense trees form a shadowy forest. The wind rustles the leaves with a whisper, hinting at secrets hidden beneath the canopy.", room, room2, Direction::NORTH);
-	Exit* southExit = new Exit("south", "To the south, cracked stone pillars rise from the earth - remnants of some forgotten structure cloaked in dust and silence.", room2, room, Direction::SOUTH);
+	Exit* northExit = new Exit("North Door", "", room, room2, Direction::NORTH, true, 2);
+	Exit* southExit = new Exit("South Door", "", room2, room, Direction::SOUTH, false, 2);
 	addEntity(northExit);
 	addEntity(southExit);
 
-	Chest* chest = new Chest("strongbox", "asdasdasd", true, 1);
-	Key* key = new Key("strongkey", "asdsa", 2);
-	Key* key1 = new Key("key", "asdsa", 1);
+	Chest* chest = new Chest("strongbox", "", true, 1);
+	Key* key = new Key("strongkey", "", 2);
+	Key* key1 = new Key("key", "", 1);
 	addEntity(chest);
 	addEntity(key);
 	addEntity(key1);
 
 	room->add(gosho);
 	room->add(hp);
+	room->add(atk);
+	room->add(stam);
 	chest->add(sword);
 	chest->add(helmet);
 	chest->add(bracers);

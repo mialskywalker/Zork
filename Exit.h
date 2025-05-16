@@ -10,9 +10,11 @@ class Exit : public Entity {
 	Direction direction;
 	Room* source;
 	Room* destination;
+	bool isLocked;
+	int id;
 
 public:
-	Exit(const string& name, const string& description, Room* source, Room* destination, Direction direction);
+	Exit(const string& name, const string& description, Room* source, Room* destination, Direction direction, bool isLocked, int id);
 	~Exit() override;
 	Exit(const Exit&) = delete;
 	Exit& operator=(const Exit&) = delete;
@@ -26,6 +28,14 @@ public:
 	Room* getDestination() const;
 
 	const Direction& getDirection() const;
+
+	bool getIsLocked() const;
+
+	int getId() const;
+
+	void unlock(int keyId);
+
+	void lock(int keyId);
 
 };
 
