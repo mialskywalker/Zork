@@ -8,6 +8,7 @@
 #include "Weapon.h"
 #include "Armor.h"
 #include "Enemy.h"
+#include "Chest.h"
 
 World::World() {
 	isRunning = true;
@@ -82,11 +83,15 @@ void World::setUpWorld() {
 	addEntity(northExit);
 	addEntity(southExit);
 
+	Chest* chest = new Chest("strongbox", "asdasdasd");
+	addEntity(chest);
+
 	room->add(gosho);
 	room->add(hp);
-	room->add(sword);
-	room->add(helmet);
-	room->add(bracers);
+	chest->add(sword);
+	chest->add(helmet);
+	chest->add(bracers);
+	room->add(chest);
 	room->addExit(northExit);
 	room2->addExit(southExit);
 	room->add(orc);
@@ -180,6 +185,10 @@ void World::processCommand(const string& input) {
 	else if (command == "unequip") {
 		string itemName = getCommandArgs(iss);
 		player->unequip(itemName);
+	}
+	else if (command == "open") {
+		string itemName = getCommandArgs(iss);
+		player->open(itemName);
 	}
 	else if (command == "status") {
 		player->showStatus();

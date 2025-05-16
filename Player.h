@@ -19,7 +19,7 @@ public:
 
 	Player();
 
-	~Player();
+	~Player() override;
 
 	// Getters and Setters
 
@@ -41,7 +41,7 @@ public:
 
 	Entity* getItem(const string& name);
 
-	Entity* getCreature(const string& name);
+	Entity* getEntity(const string& name);
 
 	// Methods
 
@@ -58,6 +58,8 @@ public:
 	void equip(const string& itemName);
 
 	void unequip(const string& itemName);
+
+	void open(const string& itemName);
 
 	void showStatus();
 

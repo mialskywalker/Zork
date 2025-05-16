@@ -30,9 +30,9 @@ public:
 
 	void setUpWorld();
 
-	string getCommandArgs(istringstream& iss);
-
 	void processCommand(const string& input);
+
+	string getCommandArgs(istringstream& iss);
 
 };
 

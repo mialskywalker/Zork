@@ -10,7 +10,7 @@ class Weapon : public Item {
 
 public:
 	Weapon(const string& name, const string& description, const int damage, const int reqLevel);
-	~Weapon();
+	~Weapon() override;
 	
 	int getDamage() const;
 

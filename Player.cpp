@@ -6,6 +6,7 @@
 #include "Weapon.h"
 #include "Armor.h"
 #include "Enemy.h"
+#include "Chest.h"
 
 Player::Player() :
 	Creature(CreatureTypes::PLAYER, "Player", "A great adventurer!") {
@@ -51,7 +52,7 @@ Entity* Player::getItem(const string& name) {
 	return nullptr;
 }
 
-Entity* Player::getCreature(const string& name) {
+Entity* Player::getEntity(const string& name) {
 	for (const auto& c : currentRoom->getContains()) {
 		if (c->getName() == name) {
 			return c;
@@ -101,7 +102,7 @@ void Player::use(const string& itemName) {
 }
 
 void Player::take(const string& itemName) {
-	for (auto& i : this->currentRoom->getContains()) {
+	for (auto& i : getRoom()->getContains()) {
 		if (auto item = dynamic_cast<Item*>(i)) {
 			if (item->getName() == itemName) {
 				add(item);
@@ -225,6 +226,25 @@ void Player::unequip(const string& itemName) {
 	}
 }
 
+void Player::open(const string& itemName) {
+	Item* item = dynamic_cast<Item*>(getEntity(itemName));
+
+	if (!item) {
+		cout << "Nothing to open!" << endl;
+		return;
+	}
+
+	if (item->getItemType() == ItemTypes::CHEST) {
+		Chest* chest = dynamic_cast<Chest*>(item);
+		cout << "You find:" << endl;
+		chest->listEntities();
+		chest->useChest(this);
+	}
+	else {
+		cout << "I cannot open that" << endl;
+	}
+}
+
 void Player::showStatus() {
 	cout << "-----------------------------------" << endl;
 	cout << "HP: " << this->getHealth() << endl;
@@ -234,7 +254,7 @@ void Player::showStatus() {
 }
 
 void Player::attack(const string& enemyName) {
-	Creature* creature = dynamic_cast<Creature*>(getCreature(enemyName));
+	Creature* creature = dynamic_cast<Creature*>(getEntity(enemyName));
 
 	if (!creature) {
 		cout << "You don't have a target!" << endl;

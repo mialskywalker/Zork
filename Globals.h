@@ -19,6 +19,8 @@ enum class ItemTypes {
 	POTION,
 	ARMOR,
 	WEAPON,
+	CHEST,
+	KEY,
 	BASE
 };
 
@@ -27,4 +29,5 @@ enum class CreatureTypes {
 	ENEMY,
 	PLAYER
 };
+
 #endif

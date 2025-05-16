@@ -10,7 +10,7 @@ class Armor : public Item {
 
 public:
 	Armor(const string& name, const string& description, const int armor, const int reqLevel);
-	~Armor();
+	~Armor() override;
 
 	int getArmor() const;
 
