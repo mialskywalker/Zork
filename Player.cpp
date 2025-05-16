@@ -7,6 +7,7 @@
 #include "Armor.h"
 #include "Enemy.h"
 #include "Chest.h"
+#include "Key.h"
 
 Player::Player() :
 	Creature(CreatureTypes::PLAYER, "Player", "A great adventurer!") {
@@ -236,6 +237,10 @@ void Player::open(const string& itemName) {
 
 	if (item->getItemType() == ItemTypes::CHEST) {
 		Chest* chest = dynamic_cast<Chest*>(item);
+		if (chest->getIsLocked()) {
+			cout << chest->getName() << " is locked! You need a key." << endl;
+			return;
+		}
 		cout << "You find:" << endl;
 		chest->listEntities();
 		chest->useChest(this);
@@ -243,6 +248,60 @@ void Player::open(const string& itemName) {
 	else {
 		cout << "I cannot open that" << endl;
 	}
+}
+
+void Player::unlock(const string& name) {
+	Entity* entity = getEntity(name);
+
+	if (!entity) {
+		cout << "Nothing to unlock!" << endl;
+		return;
+	}
+
+	if (auto chest = dynamic_cast<Chest*>(entity)) {
+
+		int requiredId = chest->getId();
+		for (const auto& i : getContains()) {
+			if (auto key = dynamic_cast<Key*>(i)) {
+				if (key->getId() == requiredId) {
+					chest->unlock(requiredId);
+					return;
+				}
+			}
+		}
+
+		cout << "Key not compatible" << endl;
+		return;
+	}
+
+	cout << "I can't unlock that!" << endl;
+}
+
+void Player::lock(const string& name) {
+	Entity* entity = getEntity(name);
+
+	if (!entity) {
+		cout << "Nothing to unlock!" << endl;
+		return;
+	}
+
+	if (auto chest = dynamic_cast<Chest*>(entity)) {
+
+		int requiredId = chest->getId();
+		for (const auto& i : getContains()) {
+			if (auto key = dynamic_cast<Key*>(i)) {
+				if (key->getId() == requiredId) {
+					chest->lock(requiredId);
+					return;
+				}
+			}
+		}
+
+		cout << "Key not compatible" << endl;
+		return;
+	}
+
+	cout << "I can't lock that!" << endl;
 }
 
 void Player::showStatus() {

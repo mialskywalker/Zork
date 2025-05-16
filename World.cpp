@@ -9,6 +9,7 @@
 #include "Armor.h"
 #include "Enemy.h"
 #include "Chest.h"
+#include "Key.h"
 
 World::World() {
 	isRunning = true;
@@ -83,8 +84,12 @@ void World::setUpWorld() {
 	addEntity(northExit);
 	addEntity(southExit);
 
-	Chest* chest = new Chest("strongbox", "asdasdasd");
+	Chest* chest = new Chest("strongbox", "asdasdasd", true, 1);
+	Key* key = new Key("strongkey", "asdsa", 2);
+	Key* key1 = new Key("key", "asdsa", 1);
 	addEntity(chest);
+	addEntity(key);
+	addEntity(key1);
 
 	room->add(gosho);
 	room->add(hp);
@@ -92,6 +97,8 @@ void World::setUpWorld() {
 	chest->add(helmet);
 	chest->add(bracers);
 	room->add(chest);
+	room->add(key);
+	room->add(key1);
 	room->addExit(northExit);
 	room2->addExit(southExit);
 	room->add(orc);
@@ -189,6 +196,14 @@ void World::processCommand(const string& input) {
 	else if (command == "open") {
 		string itemName = getCommandArgs(iss);
 		player->open(itemName);
+	}
+	else if (command == "unlock") {
+		string toUnlock = getCommandArgs(iss);
+		player->unlock(toUnlock);
+	}
+	else if (command == "lock") {
+		string toLock = getCommandArgs(iss);
+		player->lock(toLock);
 	}
 	else if (command == "status") {
 		player->showStatus();

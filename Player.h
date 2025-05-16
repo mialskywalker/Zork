@@ -61,6 +61,10 @@ public:
 
 	void open(const string& itemName);
 
+	void unlock(const string& name);
+
+	void lock(const string& name);
+
 	void showStatus();
 
 	void attack(const string& enemyName);

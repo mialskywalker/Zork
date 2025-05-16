@@ -4,8 +4,10 @@
 #include "Chest.h"
 #include "Player.h"
 
-Chest::Chest(const string& name, const string& description) :
-	Item(name, ItemTypes::CHEST, description) { }
+Chest::Chest(const string& name, const string& description, bool isLocked, int id) :
+	Item(name, ItemTypes::CHEST, description),
+	isLocked(isLocked),
+	id(id) { }
 
 Chest::~Chest() {}
 
@@ -17,6 +19,10 @@ Item* Chest::getItem(const string& name) {
 	}
 	return nullptr;
 }
+
+int Chest::getId() const { return this->id; }
+
+bool Chest::getIsLocked() const { return this->isLocked; }
 
 void Chest::placeItem(Item* item) {
 	if (item) {
@@ -64,8 +70,30 @@ void Chest::useChest(Player* player) {
 		}
 	}
 	else {
-		cout << "You close the " << getName() << endl;
+		cout << "Invalid command" << endl;
+	}
+	
+	cout << "You close the " << getName() << endl;
+	return;
+}
+
+void Chest::unlock(int keyId) {
+	if (!getIsLocked()) {
+		cout << getName() << " is not locked!" << endl;
 		return;
 	}
+
+	this->isLocked = false;
+	cout << getName() << " successfully unlocked!" << endl;
+}
+
+void Chest::lock(int keyId) {
+	if (getIsLocked()) {
+		cout << getName() << " is already locked!" << endl;
+		return;
+	}
+
+	this->isLocked = true;
+	cout << getName() << " successfully locked!" << endl;
 }
 
