@@ -21,8 +21,6 @@ public:
 
 	~Player() override;
 
-	// Getters and Setters
-
 	Room* getRoom() const;
 
 	void setCurrentRoom(Room* room);
@@ -42,8 +40,6 @@ public:
 	Entity* getItem(const string& name);
 
 	Entity* getEntity(const string& name);
-
-	// Methods
 
 	void listInventory();
 

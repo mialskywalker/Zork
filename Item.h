@@ -8,11 +8,6 @@ class Item : public Entity {
 public:
 	Item(const string& name, ItemTypes itemType, const string& description);
 	~Item() override;
-	Item(const Item&) = delete;
-	Item& operator=(const Item&) = delete;
-	Item(Item&&) = default;
-	Item& operator=(Item&&) = default;
-
 
 	virtual bool getEquipped() const { return false; }
 

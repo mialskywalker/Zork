@@ -21,8 +21,6 @@ public:
 	Entity(Entity&&) = default;
 	Entity& operator=(Entity&&) = default;
 
-	// Getters
-
 	Type getType() const;
 
 	const string& getName() const;
@@ -31,12 +29,8 @@ public:
 
 	list<Entity*>& getContains();
 
-	// Methods
-
 	virtual void add(Entity* entity);
 	
-	//virtual void destroy(Entity* entity);
-
 	virtual void remove(Entity* entity);
 
 	void listEntities() const;

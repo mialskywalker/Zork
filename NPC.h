@@ -9,10 +9,6 @@ class NPC : public Creature {
 public:
 	NPC(const string& name, const string& description, const string& dialogue);
 	~NPC() override;
-	NPC(const NPC&) = delete;
-	NPC& operator=(const NPC&) = delete;
-	NPC(NPC&&) = default;
-	NPC& operator=(NPC&&) = default;
 
 	const string& getDialogue() const;
 

@@ -16,12 +16,6 @@ class Creature : public Entity {
 public:
 	Creature(CreatureTypes creatureType, const string& name, const string& description);
 	~Creature() override;
-	Creature(const Creature&) = delete;
-	Creature& operator=(const Creature&) = delete;
-	Creature(Creature&&) = default;
-	Creature& operator=(Creature&&) = default;
-
-	// Getters and Setters
 
 	int getHealth() const;
 
@@ -42,8 +36,6 @@ public:
 	void setLevel(int lvl);
 
 	const CreatureTypes& getCreatureType() const;
-
-	// Methods
 
 	bool isAlive() const;
 

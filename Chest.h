@@ -11,11 +11,7 @@ class Chest : public Item {
 public:
 	Chest(const string& name, const string& description, bool isLocked, int id);
 	~Chest() override;
-	Chest(const Chest&) = delete;
-	Chest& operator=(const Chest&) = delete;
-	Chest(Chest&&) = default;
-	Chest& operator=(Chest&&) = default;
-
+	
 	Item* getItem(const string& name);
 
 	int getId() const;

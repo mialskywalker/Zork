@@ -12,10 +12,6 @@ class Potion : public Item {
 public:
 	Potion(const string& name, const string& description, const string& stat, int amount);
 	~Potion() override;
-	Potion(const Potion&) = delete;
-	Potion& operator=(const Potion&) = delete;
-	Potion(Potion&&) = default;
-	Potion& operator=(Potion&&) = default;
 
 	const string& getStat() const;
 

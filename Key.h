@@ -8,10 +8,6 @@ class Key : public Item {
 public:
 	Key(const string& name, const string& description, int id);
 	~Key() override;
-	Key(const Key&) = delete;
-	Key& operator=(const Key&) = delete;
-	Key(Key&&) = default;
-	Key& operator=(Key&&) = default;
 
 	int getId() const;
 };

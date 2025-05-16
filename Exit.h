@@ -16,12 +16,6 @@ class Exit : public Entity {
 public:
 	Exit(const string& name, const string& description, Room* source, Room* destination, Direction direction, bool isLocked, int id);
 	~Exit() override;
-	Exit(const Exit&) = delete;
-	Exit& operator=(const Exit&) = delete;
-	Exit(Exit&&) = default;
-	Exit& operator=(Exit&&) = default;
-
-	// Getters
 
 	Room* getSource() const;
 
