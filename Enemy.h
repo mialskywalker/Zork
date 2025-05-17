@@ -6,7 +6,7 @@
 class Enemy : public Creature {
 	int xpYield;
 public:
-	Enemy(const string& name, const string& description, int hp, int attackPower);
+	Enemy(const string& name, const string& description, int hp, int attackPower, int xpYield);
 	~Enemy() override;
 
 	int getXPYield() const;

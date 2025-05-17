@@ -93,7 +93,7 @@ void World::setUpWorld() {
 	Exit* castleRoadToAlch = new Exit("west", "A narrow side path leads to a ruined stone building.", castleRoad, alchemistLab, Direction::WEST, false, 6);
 	Exit* alchToCastleRoad = new Exit("east", "A collapsed stone corridor leads back toward the castle path.", alchemistLab, castleRoad, Direction::EAST, false, 6);
 	// Castle Road <-> Castle Hall
-	Exit* castleRoadToCH = new Exit("north", "An ancient stone door marks the entrance — it can only be opened with a special key.", castleRoad, castleHall, Direction::NORTH, true, 7);
+	Exit* castleRoadToCH = new Exit("north", "An ancient stone door marks the entrance — it can only be opened with a special key.", castleRoad, castleHall, Direction::NORTH, true, 7); // locked id 7
 	Exit* CHToCastleRoad = new Exit("south", "An ancient stone door marks the exit.", castleHall, castleRoad, Direction::SOUTH, false, 7);
 
 	// LINK EXITS
@@ -151,62 +151,103 @@ void World::setUpWorld() {
 	addEntity(castleRoadToCH);
 	addEntity(CHToCastleRoad);
 
+	// NPCS
+	NPC* villager = new NPC("villager", "The Villager", "You're awake. I wasn't sure you'd make it.\nThey were dragging your body to the necromancer's stronghold. Take what's in the chest\nYou'll need it if you want to survive.");
+	NPC* townSurvivor = new NPC("survivor", "Town Survivor", "The forest holds monsters now, but also strength.\nIf you're not ready for the castle, check the blacksmith or the lab.");
+	NPC* alchemist = new NPC("alchemist", "Wounded Alchemist", "You’ll need potions. The lab has some left… if you can get past the rubble.");
 
-	/*NPC* gosho = new NPC("hooded figure", "", "Thank godness you're alive!");
-	Enemy* orc = new Enemy("orc", "", 50, 150);
+	// ADD NPCS
+	safeHouse->add(villager);
+	villageCenter->add(townSurvivor);
+	castleRoad->add(alchemist);
 
-	orc->setLevel(5);
-	orc->setXPYield(150);
-	addEntity(gosho);
-	addEntity(orc);
+	// ENEMIES
+	Enemy* skeleton = new Enemy("skeleton", "Rusted armor rattles as this undead patrols the area.", 50, 5, 100);
+	Enemy* skeleton1 = new Enemy("skeleton", "A reanimated corpse of a fallen warrior, its bones held together by dark magic.", 50, 5, 100);
+	Enemy* skeleton2 = new Enemy("skeleton", "Rusted armor rattles as this undead patrols the area.", 50, 5, 100);
+	Enemy* skeleton3 = new Enemy("skeleton", "A reanimated corpse of a fallen warrior, its bones held together by dark magic.", 50, 5, 100);
+	Enemy* skeleton4 = new Enemy("skeleton", "Rusted armor rattles as this undead patrols the area.", 50, 5, 100);
 
-	Potion* hp = new Potion("vial", "", "HP", 0);
-	Potion* atk = new Potion("atk", "", "AttackPower", 20);
-	Potion* stam = new Potion("stam", "", "Stamina", 10);
-	Weapon* sword = new Weapon("sword", "", 50, 1);
-	Weapon* axe = new Weapon("axe", "", 70, 2);
-	Armor* helmet = new Armor("helmet", "", 110, 1);
-	Armor* bracers = new Armor("bracers", "", 75, 2);
+	Enemy* gravekeeper = new Enemy("gravekeeper", "Once a humble caretaker of the dead, now twisted by necromancy.\nHis eyes burn with loyalty to the cursed one he buried.", 100, 15, 200);
+	Enemy* kingOfOld = new Enemy("king of old", "A long-dead monarch, awakened to guard the graveyard with relentless wrath.\nHis rusted crown is fused to his skull, and a cursed sword rests in his grasp.", 150, 20, 200);
+	Enemy* corruptedBlacksmith = new Enemy("blacksmith", "Once a master of steel, now a puppet of dark forces.\nHis hammer drips with blood, and his forge burns with unnatural flame.", 75, 10, 150);
+	Enemy* necromancer = new Enemy("necromancer", "The architect of the dead’s return. Cloaked in shadow, he commands the grave with whispers and raises armies with a single word.", 250, 25, 500);
 
-	addEntity(hp);
-	addEntity(atk);
-	addEntity(stam);
-	addEntity(sword);
-	addEntity(helmet);
-	addEntity(axe);
-	addEntity(bracers);
-	orc->add(axe);
+	// Set Enemy Level and XP
+	
 
-	Room* room = new Room("Entrance", "This is an open field");
-	Room* room2 = new Room("Hallway", "Second room");
-	addEntity(room);
-	addEntity(room2);
+	// ADD ENEMIES
+	forest->add(skeleton);
+	graveyard->add(skeleton1);
+	blacksmith->add(skeleton2);
+	castleRoad->add(skeleton3);
+	alchemistLab->add(skeleton4);
+	blacksmith->add(corruptedBlacksmith);
+	gravekeeperHouse->add(gravekeeper);
+	graveyard->add(kingOfOld);
+	castleHall->add(necromancer);
 
-	Exit* northExit = new Exit("North Door", "", room, room2, Direction::NORTH, true, 2);
-	Exit* southExit = new Exit("South Door", "", room2, room, Direction::SOUTH, false, 2);
-	addEntity(northExit);
-	addEntity(southExit);
+	addEntity(skeleton);
+	addEntity(skeleton1);
+	addEntity(skeleton2);
+	addEntity(skeleton3);
+	addEntity(skeleton4);
+	addEntity(gravekeeper);
+	addEntity(kingOfOld);
+	addEntity(corruptedBlacksmith);
+	addEntity(necromancer);
 
-	Chest* chest = new Chest("strongbox", "", true, 1);
-	Key* key = new Key("strongkey", "", 2);
-	Key* key1 = new Key("key", "", 1);
+
+	// ITEMS
+	Chest* chest = new Chest("chest", "A wooden chest.", false, 8);
+	Chest* blacksmithChest = new Chest("chest", "Blacksmith Chest", true, 9); // locked id 9 key dropped from corruptedBlacksmith
+	Weapon* woodenSword = new Weapon("wooden sword", "Wooden Sword", 5, 1);
+	Weapon* steelSword = new Weapon("steel sword", "Steel Sword", 10, 2);
+	Weapon* legendarySword = new Weapon("sword of destiny", "Sword of Destiny", 25, 5);
+	Armor* woodenArmor = new Armor("wooden armor", "Wooden Armor", 5, 1);
+	Armor* steelArmor = new Armor("steel armor", "Steel Armor", 10, 2);
+	Armor* mithrilArmor = new Armor("mithril armor", "Mithril Armor", 25, 5);
+	Potion* staminaPotion = new Potion("stamina potion", "Stamina Potion", "Stamina", 10);
+	Potion* healthPotion = new Potion("health potion", "Health Potion", "HP", 0);
+	Potion* apPotion = new Potion("strength potion", "Strength Potion", "AttackPower", 10);
+	Key* blacksmithKey = new Key("chest key", "Blacksmith Chest Key", 9);
+	Key* graveyardKey = new Key("graveyard key", "Graveyard Key", 4);
+	Key* castleHallKey = new Key("castle gate key", "Castle Gate Key", 7);
+
+	chest->add(woodenSword);
+	safeHouse->add(chest);
+
+	blacksmithChest->add(steelSword);
+	blacksmithChest->add(mithrilArmor);
+
+	skeleton->add(woodenArmor);
+	skeleton2->add(healthPotion);
+	skeleton3->add(steelArmor);
+	corruptedBlacksmith->add(blacksmithKey);
+	gravekeeper->add(graveyardKey);
+	kingOfOld->add(legendarySword);
+	kingOfOld->add(castleHallKey);
+
+	alchemistLab->add(apPotion);
+	alchemistLab->add(staminaPotion);
+
+
 	addEntity(chest);
-	addEntity(key);
-	addEntity(key1);
+	addEntity(blacksmithChest);
+	addEntity(woodenSword);
+	addEntity(steelSword);
+	addEntity(legendarySword);
+	addEntity(woodenArmor);
+	addEntity(steelArmor);
+	addEntity(mithrilArmor);
+	addEntity(staminaPotion);
+	addEntity(healthPotion);
+	addEntity(apPotion);
+	addEntity(blacksmithKey);
+	addEntity(graveyardKey);
+	addEntity(castleHallKey);
 
-	room->add(gosho);
-	room->add(hp);
-	room->add(atk);
-	room->add(stam);
-	chest->add(sword);
-	chest->add(helmet);
-	chest->add(bracers);
-	room->add(chest);
-	room->add(key);
-	room->add(key1);
-	room->addExit(northExit);
-	room2->addExit(southExit);
-	room->add(orc);*/
+	blacksmith->add(blacksmithChest);
 
 	player = new Player();
 	player->setCurrentRoom(safeHouse);
@@ -255,7 +296,7 @@ void World::processCommand(const string& input) {
 	iss >> command;
 
 	if (command == "look") {
-		cout << player->getRoom()->getName() << endl;
+		cout << "You are in: " << player->getRoom()->getName() << endl;
 		cout << player->getRoom()->getDescription() << endl;
 		cout << "You see:" << endl;
 		player->getRoom()->listEntities();
@@ -290,7 +331,7 @@ void World::processCommand(const string& input) {
 				if (npc->getName() == npcName)
 				{
 					isValidNPC = true;
-					cout << npc->getName() << ": " << npc->getDialogue() << endl;
+					cout << npc->getDescription() << ": " << npc->getDialogue() << endl;
 				}
 			}
 		}

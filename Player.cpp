@@ -66,7 +66,7 @@ void Player::listInventory() {
 	if (getContains().size()) {
 		cout << "You are carrying:" << endl;
 		for (const auto& i : getContains())
-			cout << "- " << i->getName() << " (" << i->getDescription() << ")" << endl;
+			cout << "- " << i->getDescription() << " (" << i->getName() << ")" << endl;
 	}
 	else {
 		cout << "You aren't carrying anything!" << endl;
@@ -111,7 +111,7 @@ void Player::take(const string& itemName) {
 		if (auto item = dynamic_cast<Item*>(i)) {
 			if (item->getName() == itemName) {
 				add(item);
-				cout << item->getName() << " added to inventory!" << endl;
+				cout << item->getDescription() << " added to inventory!" << endl;
 				getRoom()->remove(i);
 				return;
 			}
@@ -129,7 +129,7 @@ void Player::drop(const string& itemName) {
 
 	if (item != nullptr) {
 		getRoom()->add(item);
-		cout << item->getName() << " dropped!" << endl;
+		cout << item->getDescription() << " dropped!" << endl;
 		remove(item);
 	}
 	else {
@@ -242,7 +242,11 @@ void Player::open(const string& itemName) {
 	if (item->getItemType() == ItemTypes::CHEST) {
 		Chest* chest = dynamic_cast<Chest*>(item);
 		if (chest->getIsLocked()) {
-			cout << chest->getName() << " is locked! You need a key." << endl;
+			cout << "The " << chest->getName() << " is locked! You need a key." << endl;
+			return;
+		}
+		if (chest->getContains().size() <= 0) {
+			cout << "The " << chest->getName() << " is empty!" << endl;
 			return;
 		}
 		cout << "You find:" << endl;
@@ -339,9 +343,10 @@ void Player::lock(const string& name) {
 
 void Player::showStatus() {
 	cout << "-----------------------------------" << endl;
-	cout << "HP: " << this->getHealth() << endl;
-	cout << "Attack Power: " << this->getAttackPower() << endl;
-	cout << "Armor: " << this->getArmor() << endl;
+	cout << "Level: " << getLevel() << endl;
+	cout << "HP: " << getHealth() << endl;
+	cout << "Attack Power: " << getAttackPower() << endl;
+	cout << "Armor: " << getArmor() << endl;
 	cout << "-----------------------------------" << endl;
 }
 

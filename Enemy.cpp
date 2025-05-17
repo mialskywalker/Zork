@@ -2,11 +2,11 @@
 #include "Enemy.h"
 #include "Room.h"
 
-Enemy::Enemy(const string& name, const string& description, int hp, int attackPower) :
-	Creature(CreatureTypes::ENEMY, name, description) {
+Enemy::Enemy(const string& name, const string& description, int hp, int attackPower, int xpYield) :
+	Creature(CreatureTypes::ENEMY, name, description),
+	xpYield(xpYield) {
 	setHealth(hp);
 	setAttackPower(attackPower);
-	setXPYield(10);
 }
 
 Enemy::~Enemy() {}
@@ -21,7 +21,7 @@ void Enemy::drop(Room* room) {
 	if (!isAlive())
 	{
 		for (auto& i : getContains()) {
-			cout << "* " << i->getName() << " dropped!" << endl;
+			cout << "* " << i->getDescription() << " dropped!" << endl;
 			room->add(i);
 		}
 		getContains().clear();

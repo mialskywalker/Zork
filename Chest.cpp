@@ -42,8 +42,18 @@ void Chest::useChest(Player* player) {
 	iss >> command;
 
 	if (command == "take") {
-		iss >> arg;
-		Item* item = getItem(arg);
+		bool bFirst = true;
+		string res = "";
+		while (iss >> arg) {
+			if (bFirst) {
+				res += arg;
+				bFirst = false;
+			}
+			else {
+				res += ' ' + arg;
+			}
+		}
+		Item* item = getItem(res);
 		if (!item) {
 			cout << "Item not in " << getName() << endl;
 			return;
