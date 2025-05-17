@@ -1,5 +1,5 @@
-#include "Entity.h"
 #include <iostream>
+#include "Entity.h"
 
 Entity::Entity(const Type type, const string& name, const string& description) :
 	type(type),
@@ -20,7 +20,7 @@ list<Entity*>& Entity::getContains() { return this->contains; }
 
 void Entity::add(Entity* entity) {
 	if (entity->getType() != Type::EXIT) {
-		contains.push_back(std::move(entity));
+		contains.push_back(entity);
 	}
 }
 

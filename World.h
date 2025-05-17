@@ -30,6 +30,8 @@ public:
 
 	void setUpWorld();
 
+	void showIntro();
+
 	void processCommand(const string& input);
 
 	string getCommandArgs(istringstream& iss);

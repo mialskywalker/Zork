@@ -83,7 +83,7 @@ void Player::move(const Direction& direction) {
 					cout << "You move to " << getRoom()->getName() << endl;
 					return;
 				}
-				cout << exit->getName() << " is locked. You need to find a key!" << endl;
+				cout << exit->getDestination()->getName() << " is locked. You need to find a key!" << endl;
 				return;
 			}
 		}

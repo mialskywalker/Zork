@@ -40,21 +40,120 @@ void World::removeEntity(Entity* entity) {
 
 void World::run() {
 	cout << "Welcome to the world of adventure!" << endl;
+	cout << "Press Enter to begin your journey, or type 'skip' to jump ahead" << endl;
+	cout << ">> ";
+	string input;
+	getline(cin, input);
+	if (input != "skip")
+		showIntro();
 
 	while (isRunning) {
 		if (!player->isAlive())
 			break;
 		cout << endl << ">> ";
-		string input;
 		getline(cin, input);
 		processCommand(input);
 	}
 }
 
 void World::setUpWorld() {
-	NPC* gosho = new NPC("hooded figure", "", "Thank godness you're alive!");
-	Enemy* orc = new Enemy("orc", "", 50, 150);
 
+
+	// ROOMS
+	Room* safeHouse = new Room("Safe House", "A quiet stone shelter, dimly lit by a flickering lantern. Dust hangs in the air. A lone villager watches over you.");
+	Room* villageCenter = new Room("Village Center", "Cracked cobblestone paths split in four directions. The village is eerily quiet, with signs of recent struggle.");
+	Room* forest = new Room("Forest", "Twisted trees and thick underbrush surround you. The wind howls unnaturally through the branches.");
+	Room* graveyard = new Room("Graveyard", "Cracked gravestones and open coffins litter the cursed ground. A chill seeps into your bones.");
+	Room* blacksmith = new Room("Blacksmith Workshop", "The forge glows faintly. Tools lie scattered across the floor, and something lurks in the back.");
+	Room* castleRoad = new Room("Castle Road", "The path here is lined with fallen banners and cracked statues. The castle looms in the distance.");
+	Room* castleHall = new Room("Castle Hall", "Tall stone columns line the grand hall. At its center stands the necromancer, cloaked in shadows.");
+	Room* gravekeeperHouse = new Room("Gravekeeper's House", "The smell of decay clings to the air. Ritual tools and bones are scattered across the floor.");
+	Room* alchemistLab = new Room("Alchemist Lab", "Broken shelves and smashed vials litter the floor. A few intact potions remain on a glowing table.");
+
+	// EXITS
+	// Safe House <-> Village Center
+	Exit* houseDoorN = new Exit("north", "A reinforced wooden door leads to the outside world.", safeHouse, villageCenter, Direction::NORTH, false, 0);
+	Exit* houseDoorS = new Exit("south", "Door to the Safe House", villageCenter, safeHouse, Direction::SOUTH, false, 0);
+	// Village Center <-> Forest
+	Exit* centerToForest = new Exit("east", "A narrow, overgrown path leads into the dark trees.", villageCenter, forest, Direction::EAST, false, 1);
+	Exit* forestToCenter = new Exit("west", "The overgrown trail leads back to the village square.", forest, villageCenter, Direction::WEST, false, 1);
+	// Village Center <-> Blacksmith Workshop
+	Exit* centerToBlacksmith = new Exit("west", "You hear faint metal clanging from behind thick wooden shutters.", villageCenter, blacksmith, Direction::WEST, false, 2);
+	Exit* blacksmithToCenter = new Exit("east", "The metal-reinforced door leads back to the village.", blacksmith, villageCenter, Direction::EAST, false, 2);
+	// Village Center <-> Castle Road
+	Exit* centerTocastleRoad = new Exit("north", "A wide dirt road leads toward the looming shape of the castle.", villageCenter, castleRoad, Direction::NORTH, false, 3);
+	Exit* castleRoadToCenter = new Exit("south", "The path leads back to the center of the village.", castleRoad, villageCenter, Direction::SOUTH, false, 3);
+	// Forest <-> Graveyard
+	Exit* forestToGraveyard = new Exit("east", "A rusted gate bars your way into the graveyard.", forest, graveyard, Direction::EAST, true, 4); // locked id 4
+	Exit* graveyardToForest = new Exit("west", "The only exit is the rusted gate you entered through.", graveyard, forest, Direction::WEST, false, 4);
+	// Forest <-> Gravekeeper's House
+	Exit* forestToGravekeeper = new Exit("south", "A worn trail descends into a shadowed glade.", forest, gravekeeperHouse, Direction::SOUTH, false, 5);
+	Exit* gravekeeperToForest = new Exit("north", "A steep path leads back to the forest above.", gravekeeperHouse, forest, Direction::NORTH, false, 5);
+	// Castle Road <-> Alchemist Lab
+	Exit* castleRoadToAlch = new Exit("west", "A narrow side path leads to a ruined stone building.", castleRoad, alchemistLab, Direction::WEST, false, 6);
+	Exit* alchToCastleRoad = new Exit("east", "A collapsed stone corridor leads back toward the castle path.", alchemistLab, castleRoad, Direction::EAST, false, 6);
+	// Castle Road <-> Castle Hall
+	Exit* castleRoadToCH = new Exit("north", "An ancient stone door marks the entrance — it can only be opened with a special key.", castleRoad, castleHall, Direction::NORTH, true, 7);
+	Exit* CHToCastleRoad = new Exit("south", "An ancient stone door marks the exit.", castleHall, castleRoad, Direction::SOUTH, false, 7);
+
+	// LINK EXITS
+	// Safe House <-> Village Center
+	safeHouse->addExit(houseDoorN);
+	villageCenter->addExit(houseDoorS);
+	// Village Center <-> Forest
+	villageCenter->addExit(centerToForest);
+	forest->addExit(forestToCenter);
+	// Village Center <-> Blacksmith Workshop
+	villageCenter->addExit(centerToBlacksmith);
+	blacksmith->addExit(blacksmithToCenter);
+	// Village Center <-> Castle Road
+	villageCenter->addExit(centerTocastleRoad);
+	castleRoad->addExit(castleRoadToCenter);
+	// Forest <-> Graveyard
+	forest->addExit(forestToGraveyard);
+	graveyard->addExit(graveyardToForest);
+	// Forest <-> Gravekeeper's House
+	forest->addExit(forestToGravekeeper);
+	gravekeeperHouse->addExit(gravekeeperToForest);
+	// Castle Road <-> Alchemist Lab
+	castleRoad->addExit(castleRoadToAlch);
+	alchemistLab->addExit(alchToCastleRoad);
+	// Castle Road <-> Castle Hall
+	castleRoad->addExit(castleRoadToCH);
+	castleHall->addExit(CHToCastleRoad);
+
+	// ADD ROOMS
+	addEntity(safeHouse);
+	addEntity(villageCenter);
+	addEntity(forest);
+	addEntity(graveyard);
+	addEntity(blacksmith);
+	addEntity(castleRoad);
+	addEntity(castleHall);
+	addEntity(gravekeeperHouse);
+	addEntity(alchemistLab);
+
+	// ADD EXITS
+	addEntity(houseDoorN);
+	addEntity(houseDoorS);
+	addEntity(centerToForest);
+	addEntity(forestToCenter);
+	addEntity(centerToBlacksmith);
+	addEntity(blacksmithToCenter);
+	addEntity(centerTocastleRoad);
+	addEntity(castleRoadToCenter);
+	addEntity(forestToGraveyard);
+	addEntity(graveyardToForest);
+	addEntity(forestToGravekeeper);
+	addEntity(gravekeeperToForest);
+	addEntity(castleRoadToAlch);
+	addEntity(alchToCastleRoad);
+	addEntity(castleRoadToCH);
+	addEntity(CHToCastleRoad);
+
+
+	/*NPC* gosho = new NPC("hooded figure", "", "Thank godness you're alive!");
+	Enemy* orc = new Enemy("orc", "", 50, 150);
 
 	orc->setLevel(5);
 	orc->setXPYield(150);
@@ -107,12 +206,31 @@ void World::setUpWorld() {
 	room->add(key1);
 	room->addExit(northExit);
 	room2->addExit(southExit);
-	room->add(orc);
+	room->add(orc);*/
 
 	player = new Player();
-	player->setCurrentRoom(room);
+	player->setCurrentRoom(safeHouse);
 	addEntity(player);
 
+}
+
+void World::showIntro() {
+	cout << "=============================================================\n";
+
+	cout << "After a great battle, your body was mistaken for dead\n";
+	cout << "and taken away by skeletal hands.\n\n";
+
+	cout << "They carried you toward an abandoned village - a place cloaked\n";
+	cout << "in silence and rot - where a hidden necromancer is raising an\n";
+	cout << "army of the fallen.\n\n";
+
+	cout << "But fate intervened.\n";
+	cout << "A brave villager rescued you and brought you to safety.\n";
+	cout << "Now, weak and unequipped, you awaken to a dying world in need\n";
+	cout << "of a hero.\n\n";
+
+	cout << "Will you rise again and stop the darkness?\n\n";
+	cout << "=============================================================\n";
 }
 
 string World::getCommandArgs(istringstream& iss) {
