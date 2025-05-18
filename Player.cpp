@@ -344,6 +344,7 @@ void Player::lock(const string& name) {
 void Player::showStatus() {
 	cout << "-----------------------------------" << endl;
 	cout << "Level: " << getLevel() << endl;
+	cout << "XP: " << getXP() << "/" << getLevelRequiredXP() << endl;
 	cout << "HP: " << getHealth() << endl;
 	cout << "Attack Power: " << getAttackPower() << endl;
 	cout << "Armor: " << getArmor() << endl;

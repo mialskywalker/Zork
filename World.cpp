@@ -99,7 +99,7 @@ void World::setUpWorld() {
 	Exit* castleRoadToAlch = new Exit("west", "A narrow side path leads to a ruined stone building.", castleRoad, alchemistLab, Direction::WEST, false, 6);
 	Exit* alchToCastleRoad = new Exit("east", "A collapsed stone corridor leads back toward the castle path.", alchemistLab, castleRoad, Direction::EAST, false, 6);
 	// Castle Road <-> Castle Hall
-	Exit* castleRoadToCH = new Exit("north", "An ancient stone door marks the entrance — it can only be opened with a special key.", castleRoad, castleHall, Direction::NORTH, true, 7); // locked id 7
+	Exit* castleRoadToCH = new Exit("north", "An ancient stone door marks the entrance - it can only be opened with a special key.", castleRoad, castleHall, Direction::NORTH, true, 7); // locked id 7
 	Exit* CHToCastleRoad = new Exit("south", "An ancient stone door marks the exit.", castleHall, castleRoad, Direction::SOUTH, false, 7);
 
 	// LINK EXITS
@@ -160,7 +160,7 @@ void World::setUpWorld() {
 	// NPCS
 	NPC* villager = new NPC("villager", "The Villager", "You're awake. I wasn't sure you'd make it.\nThey were dragging your body to the necromancer's stronghold. Take what's in the chest\nYou'll need it if you want to survive.");
 	NPC* townSurvivor = new NPC("survivor", "Town Survivor", "The forest holds monsters now, but also strength.\nIf you're not ready for the castle, check the blacksmith or the lab.");
-	NPC* alchemist = new NPC("alchemist", "Wounded Alchemist", "You’ll need potions. The lab has some left… if you can get past the rubble.");
+	NPC* alchemist = new NPC("alchemist", "Wounded Alchemist", "You'll need potions. The lab has some left if you can get past the rubble.");
 
 	// ADD NPCS
 	safeHouse->add(villager);
@@ -177,7 +177,7 @@ void World::setUpWorld() {
 	Enemy* gravekeeper = new Enemy("gravekeeper", "Once a humble caretaker of the dead, now twisted by necromancy.\nHis eyes burn with loyalty to the cursed one he buried.", 100, 15, 200);
 	Enemy* kingOfOld = new Enemy("king of old", "A long-dead monarch, awakened to guard the graveyard with relentless wrath.\nHis rusted crown is fused to his skull, and a cursed sword rests in his grasp.", 150, 20, 200);
 	Enemy* corruptedBlacksmith = new Enemy("blacksmith", "Once a master of steel, now a puppet of dark forces.\nHis hammer drips with blood, and his forge burns with unnatural flame.", 75, 10, 150);
-	necromancer = new Enemy("necromancer", "The architect of the dead’s return. Cloaked in shadow, he commands the grave with whispers and raises armies with a single word.", 250, 25, 500);
+	necromancer = new Enemy("necromancer", "The architect of the dead's return. Cloaked in shadow, he commands the grave with whispers and raises armies with a single word.", 250, 25, 500);
 
 	// Set Enemy Level and XP
 	skeleton->setLevel(2);
