@@ -35,10 +35,13 @@ public:
 
 	void setLevel(int lvl);
 
+	// This is to check if creature is friendly, enemy or player
 	const CreatureTypes& getCreatureType() const;
 
 	bool isAlive() const;
 
+	// Takes damage depending on the level difference between the 2 entities
+	// Higher level gets less damage - Lower level gets increased damage
 	int takeDamage(int amount, int levelDifference);
 
 };

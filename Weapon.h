@@ -14,6 +14,7 @@ public:
 	
 	int getDamage() const;
 
+	// Returns the required player level to use this item
 	int getReqLevel() const;
 
 	bool getEquipped() const override;
