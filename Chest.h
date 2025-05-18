@@ -25,6 +25,8 @@ public:
 	void unlock(int keyId);
 
 	void lock(int keyId);
+
+	string getInfo() const override;
 };
 
 #endif

@@ -41,7 +41,6 @@ public:
 
 	int takeDamage(int amount, int levelDifference);
 
-
 };
 
 #endif

@@ -35,6 +35,8 @@ public:
 
 	void listEntities() const;
 
+	virtual string getInfo() const { return ""; };
+
 };
 
 #endif

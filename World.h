@@ -8,11 +8,13 @@ using namespace std;
 
 class Entity;
 class Player;
+class Enemy;
 
 class World {
 	vector<Entity*> entities;
 	bool isRunning;
 	Player* player;
+	Enemy* necromancer;
 
 public:
 	World();
@@ -31,6 +33,8 @@ public:
 	void setUpWorld();
 
 	void showIntro();
+
+	void showCongratulations();
 
 	void processCommand(const string& input);
 

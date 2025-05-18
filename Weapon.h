@@ -16,7 +16,9 @@ public:
 
 	int getReqLevel() const;
 
-	bool getEquipped() const;
+	bool getEquipped() const override;
+
+	string getInfo() const override;
 
 	void equipItem();
 

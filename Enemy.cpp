@@ -27,3 +27,7 @@ void Enemy::drop(Room* room) {
 		getContains().clear();
 	}
 }
+
+string Enemy::getInfo() const {
+	return "[Level " + to_string(getLevel()) + "]";
+}

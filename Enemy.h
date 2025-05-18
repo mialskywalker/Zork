@@ -14,6 +14,8 @@ public:
 	void setXPYield(int amount);
 
 	void drop(Room* room);
+
+	string getInfo() const override;
 };
 
 #endif

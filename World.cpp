@@ -50,6 +50,12 @@ void World::run() {
 	while (isRunning) {
 		if (!player->isAlive())
 			break;
+		else if (!necromancer->isAlive())
+		{
+			showCongratulations();
+			break;
+		}
+
 		cout << endl << ">> ";
 		getline(cin, input);
 		processCommand(input);
@@ -171,10 +177,13 @@ void World::setUpWorld() {
 	Enemy* gravekeeper = new Enemy("gravekeeper", "Once a humble caretaker of the dead, now twisted by necromancy.\nHis eyes burn with loyalty to the cursed one he buried.", 100, 15, 200);
 	Enemy* kingOfOld = new Enemy("king of old", "A long-dead monarch, awakened to guard the graveyard with relentless wrath.\nHis rusted crown is fused to his skull, and a cursed sword rests in his grasp.", 150, 20, 200);
 	Enemy* corruptedBlacksmith = new Enemy("blacksmith", "Once a master of steel, now a puppet of dark forces.\nHis hammer drips with blood, and his forge burns with unnatural flame.", 75, 10, 150);
-	Enemy* necromancer = new Enemy("necromancer", "The architect of the dead’s return. Cloaked in shadow, he commands the grave with whispers and raises armies with a single word.", 250, 25, 500);
+	necromancer = new Enemy("necromancer", "The architect of the dead’s return. Cloaked in shadow, he commands the grave with whispers and raises armies with a single word.", 250, 25, 500);
 
 	// Set Enemy Level and XP
-	
+	skeleton->setLevel(2);
+	gravekeeper->setLevel(2);
+	kingOfOld->setLevel(3);
+	necromancer->setLevel(5);
 
 	// ADD ENEMIES
 	forest->add(skeleton);
@@ -256,22 +265,28 @@ void World::setUpWorld() {
 }
 
 void World::showIntro() {
-	cout << "=============================================================\n";
+	cout << "+-------------------------------------------------------------------+\n";
+	cout << "|       After a great battle, your body was mistaken for dead       |\n";
+	cout << "|                and taken away by skeletal hands.                  |\n|";
+	cout << "                                                                   |\n";
+	cout << "|  They carried you toward an abandoned village - a place cloaked   |\n";
+	cout << "|  in silence and rot - where a hidden necromancer is raising an    |\n";
+	cout << "|                      army of the fallen.                          |\n|";
+	cout << "                                                                   |\n";
+	cout << "|                      But fate intervened.                         |\n";
+	cout << "|      A brave villager rescued you and brought you to safety.      |\n";
+	cout << "|   Now, weak and unequipped, you awaken to a dying world in need   |\n";
+	cout << "|                           of a hero.                              |\n|";
+	cout << "                                                                   |\n";
+	cout << "|             Will you rise again and stop the darkness?            |\n";
+	cout << "+-------------------------------------------------------------------+\n";
+}
 
-	cout << "After a great battle, your body was mistaken for dead\n";
-	cout << "and taken away by skeletal hands.\n\n";
-
-	cout << "They carried you toward an abandoned village - a place cloaked\n";
-	cout << "in silence and rot - where a hidden necromancer is raising an\n";
-	cout << "army of the fallen.\n\n";
-
-	cout << "But fate intervened.\n";
-	cout << "A brave villager rescued you and brought you to safety.\n";
-	cout << "Now, weak and unequipped, you awaken to a dying world in need\n";
-	cout << "of a hero.\n\n";
-
-	cout << "Will you rise again and stop the darkness?\n\n";
-	cout << "=============================================================\n";
+void World::showCongratulations() {
+	cout << "+---------------------------------------+" << endl;
+	cout << "|            CONGRATULATIONS!           |" << endl;
+	cout << "| You defeated the Necromancer and won! |" << endl;
+	cout << "+---------------------------------------+" << endl;
 }
 
 string World::getCommandArgs(istringstream& iss) {

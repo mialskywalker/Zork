@@ -35,24 +35,23 @@ void Chest::placeItem(Item* item) {
 
 void Chest::useChest(Player* player) {
 	string input;
-	cout << ">> ";
+	cout << ">>>> ";
 	getline(cin, input);
 	istringstream iss(input);
 	string command, arg;
 	iss >> command;
-
-	if (command == "take") {
-		bool bFirst = true;
-		string res = "";
-		while (iss >> arg) {
-			if (bFirst) {
-				res += arg;
-				bFirst = false;
-			}
-			else {
-				res += ' ' + arg;
-			}
+	bool bFirst = true;
+	string res = "";
+	while (iss >> arg) {
+		if (bFirst) {
+			res += arg;
+			bFirst = false;
 		}
+		else {
+			res += ' ' + arg;
+		}
+	}
+	if (command == "take") {
 		Item* item = getItem(res);
 		if (!item) {
 			cout << "Item not in " << getName() << endl;
@@ -63,9 +62,8 @@ void Chest::useChest(Player* player) {
 		player->add(item);
 		remove(item);
 	}
-	else if (command == "drop") {
-		iss >> arg;
-		Item* item = dynamic_cast<Item*>(player->getItem(arg));
+	else if (command == "place") {
+		Item* item = dynamic_cast<Item*>(player->getItem(res));
 
 		if (item->getEquipped()) {
 			player->unequip(item->getName());
@@ -80,7 +78,7 @@ void Chest::useChest(Player* player) {
 		}
 	}
 	else {
-		cout << "Invalid command" << endl;
+		cout << "Invalid command." << endl;
 	}
 	
 	cout << "You close the " << getName() << endl;
@@ -105,5 +103,9 @@ void Chest::lock(int keyId) {
 
 	this->isLocked = true;
 	cout << getName() << " successfully locked!" << endl;
+}
+
+string Chest::getInfo() const {
+	return "[" + string(getIsLocked() ? "Locked" : "Unlocked") + "]";
 }
 

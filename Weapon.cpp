@@ -15,6 +15,10 @@ int Weapon::getReqLevel() const { return this->reqLevel; }
 
 bool Weapon::getEquipped() const { return this->equipped; }
 
+string Weapon::getInfo() const {
+	return "[Damage: " + to_string(getDamage()) + "| Requires level " + to_string(getReqLevel()) + "| " + (getEquipped() ? "Equipped" : "Not equipped") + "]";
+}
+
 void Weapon::equipItem() {
 	this->equipped = true;
 }

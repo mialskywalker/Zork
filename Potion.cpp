@@ -17,7 +17,7 @@ bool Potion::useItem(Player* player) {
 	if (getStat() == "HP") {
 		if (player->getHealth() < player->getMaxHealth()) {
 			int currentAmount = player->getMaxHealth() - player->getHealth();
-			player->setHealth(currentAmount);
+			player->setHealth(player->getMaxHealth());
 			cout << "Healed for " << currentAmount << "HP" << endl;
 			return true;
 		}

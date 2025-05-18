@@ -63,14 +63,13 @@ Entity* Player::getEntity(const string& name) {
 }
 
 void Player::listInventory() {
-	if (getContains().size()) {
+	if (getContains().size())
+	{
 		cout << "You are carrying:" << endl;
-		for (const auto& i : getContains())
-			cout << "- " << i->getDescription() << " (" << i->getName() << ")" << endl;
+		listEntities();
 	}
-	else {
+	else
 		cout << "You aren't carrying anything!" << endl;
-	}
 }
 
 void Player::move(const Direction& direction) {
@@ -247,6 +246,7 @@ void Player::open(const string& itemName) {
 		}
 		if (chest->getContains().size() <= 0) {
 			cout << "The " << chest->getName() << " is empty!" << endl;
+			chest->useChest(this);
 			return;
 		}
 		cout << "You find:" << endl;
@@ -405,6 +405,8 @@ void Player::gainXP(int amount, int levelDifference) {
 		setLevelRequiredXP(getLevelRequiredXP() + 50);
 		setMaxHealth(getMaxHealth() + 25);
 		setHealth(getMaxHealth());
+		setAttackPower(getAttackPower() + 10);
+		setArmor(getArmor() + 10);
 		cout << "You have reached level " << getLevel() << "!" << endl;
 	}
 }
