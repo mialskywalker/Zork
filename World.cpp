@@ -290,6 +290,9 @@ void World::showCongratulations() {
 	cout << "|            CONGRATULATIONS!           |" << endl;
 	cout << "| You defeated the Necromancer and won! |" << endl;
 	cout << "+---------------------------------------+" << endl;
+	cout << "Press Enter to exit..." << endl;
+	cin.ignore();
+	cin.get();
 }
 
 string World::getCommandArgs(istringstream& iss) {
@@ -400,6 +403,9 @@ void World::processCommand(const string& input) {
 	else if (command == "quit") {
 		isRunning = false;
 		cout << "Thank you for playing! See you soon!" << endl;
+		cout << "Press Enter to exit..." << endl;
+		cin.ignore();
+		cin.get();
 	}
 	else {
 		cout << "Invalid command!" << endl;
