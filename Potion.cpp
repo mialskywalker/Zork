@@ -20,22 +20,29 @@ bool Potion::useItem(Player* player) {
 			player->setHealth(player->getMaxHealth());
 			cout << "Healed for " << currentAmount << "HP" << endl;
 			return true;
+			// use potion if player health is not full and return true
+			// heal the player to full health and show the amount healed
 		}
 		else {
 			cout << "Health is already full" << endl;
 			return false;
+			// returns false - potion is not used and is still in inventory
 		}
 	}
 	else if (getStat() == "AttackPower") {
 		player->setAttackPower(player->getAttackPower() + getAmount());
 		cout << "Attack Power increased by " << getAmount() << endl;
 		return true;
+		// increase player attack power with the amount - potion is used
 	}
 	else if (getStat() == "Stamina") {
 		player->setMaxHealth(player->getMaxHealth() + getAmount());
 		player->setHealth(player->getMaxHealth());
 		cout << "Max Health increased to " << player->getMaxHealth() << endl;
 		return true;
+		// increase player max health with the amount - potion is used
+		// set player health value to max health
 	}
 	return false;
+	// safe return if invalid
 }

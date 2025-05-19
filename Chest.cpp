@@ -14,9 +14,11 @@ Chest::~Chest() {}
 Item* Chest::getItem(const string& name) {
 	for (const auto& i : getContains()) {
 		if (i->getName() == name) {
+			// return a pointer to the item with the given name if it exists in the chest 
 			return dynamic_cast<Item*>(i);
 		}
 	}
+	// return nullptr if not found or if entity is not an item
 	return nullptr;
 }
 
@@ -25,6 +27,7 @@ int Chest::getId() const { return this->id; }
 bool Chest::getIsLocked() const { return this->isLocked; }
 
 void Chest::placeItem(Item* item) {
+	// if item is not nullptr -> add it to chest list
 	if (item) {
 		cout << item->getName() << " placed into the " << getName() << endl;
 		add(item);
@@ -34,6 +37,7 @@ void Chest::placeItem(Item* item) {
 }
 
 void Chest::useChest(Player* player) {
+	// parses and executes the player's input command
 	string input;
 	cout << ">>>> ";
 	getline(cin, input);
@@ -42,6 +46,7 @@ void Chest::useChest(Player* player) {
 	iss >> command;
 	bool bFirst = true;
 	string res = "";
+	// extracts and returns the remainig arguments from a command input stream | Example: "take wooden sword" - returns "wooden sword"
 	while (iss >> arg) {
 		if (bFirst) {
 			res += arg;
@@ -57,18 +62,21 @@ void Chest::useChest(Player* player) {
 			cout << "Item not in " << getName() << endl;
 			return;
 		}
-
+		// if item is nullptr print and do nothing
 		cout << item->getName() << " added to inventory!" << endl;
 		player->add(item);
 		remove(item);
+		// if item is found in the chest - add to player inventory and remove from chest
 	}
 	else if (command == "place") {
+		// get item from player inventory
 		Item* item = dynamic_cast<Item*>(player->getItem(res));
 
 		if (item->getEquipped()) {
 			player->unequip(item->getName());
 		}
-
+		// if item is equipped - unequip it
+		// if item is not nullptr - add it to the chest and remove from player inventory
 		if (item != nullptr) {
 			placeItem(item);
 			player->remove(item);
@@ -80,7 +88,7 @@ void Chest::useChest(Player* player) {
 	else {
 		cout << "Invalid command." << endl;
 	}
-	
+	// after each command - player closes the chest 
 	cout << "You close the " << getName() << endl;
 	return;
 }
@@ -90,6 +98,7 @@ void Chest::unlock(int keyId) {
 		cout << getName() << " is not locked!" << endl;
 		return;
 	}
+	// if chest is not locked print and do nothing | if locked - unlock
 
 	this->isLocked = false;
 	cout << getName() << " successfully unlocked!" << endl;
@@ -100,6 +109,7 @@ void Chest::lock(int keyId) {
 		cout << getName() << " is already locked!" << endl;
 		return;
 	}
+	// if chest is locked print and do nothing | if unlocked - lock
 
 	this->isLocked = true;
 	cout << getName() << " successfully locked!" << endl;

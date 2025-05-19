@@ -1,5 +1,5 @@
-#include "Creature.h"
 #include "time.h"
+#include "Creature.h"
 
 Creature::Creature(CreatureTypes creatureType, const string& name, const string& description) :
 	creatureType(creatureType),
@@ -48,13 +48,21 @@ const CreatureTypes& Creature::getCreatureType() const { return this->creatureTy
 
 bool Creature::isAlive() const {
 	return getHealth() > 0;
+	// if health is greater than 0 returns true | if less or equal return false
 }
 
 int Creature::takeDamage(int amount, int levelDifference) {
+	// random seed
 	srand(time(0));
+
 	if (levelDifference <= 0)
 		levelDifference = 1;
+	// if level difference is negative set to 1
+
 	int damageAmount = (amount + (levelDifference * 2)) + (rand() % amount - (armor / 10));
+	// calculate damage based on level difference and armor
+
 	setHealth(getHealth() - damageAmount);
 	return damageAmount;
+	// return damage to print the amount
 }

@@ -85,6 +85,9 @@ public:
 	// hits enemy - enemy hits back if not dead
 	void attack(const string& enemyName);
 
+	// increases player level + stats
+	void levelUp();
+
 	// gains XP depending on the level difference between the 2 entities
 	// if enemy is higher level - player gains more xp when enemy dies
 	// else player gains less xp

@@ -25,6 +25,8 @@ void Enemy::drop(Room* room) {
 			room->add(i);
 		}
 		getContains().clear();
+
+		// if enemy is dead - add to the room all items contained in enemy
 	}
 }
 

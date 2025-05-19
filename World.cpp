@@ -50,15 +50,18 @@ void World::run() {
 	while (isRunning) {
 		if (!player->isAlive())
 			break;
+		// check if player is dead
 		else if (!necromancer->isAlive())
 		{
 			showCongratulations();
 			break;
+			// necromancer is dead -> game is successfully finished
 		}
 
 		cout << endl << ">> ";
 		getline(cin, input);
 		processCommand(input);
+		// get commands while the game is running
 	}
 }
 
@@ -347,11 +350,13 @@ void World::processCommand(const string& input) {
 				{
 					isValidNPC = true;
 					cout << npc->getDescription() << ": " << npc->getDialogue() << endl;
+					// npc is in the current room
 				}
 			}
 		}
 		if (!isValidNPC)
 			cout << npcName << " is not currently here." << endl;
+			// npc not in the current room or entity is not an npc
 	}
 	else if (command == "take") {
 		string itemName = getCommandArgs(iss);
