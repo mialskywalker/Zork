@@ -33,7 +33,7 @@ void Chest::placeItem(Item* item) {
 		add(item);
 		return;
 	}
-	cout << "I can't place that" << endl;
+	cout << "You can't place that" << endl;
 }
 
 void Chest::useChest(Player* player) {
@@ -82,7 +82,7 @@ void Chest::useChest(Player* player) {
 			player->remove(item);
 		}
 		else {
-			cout << "I don't have that item." << endl;
+			cout << "You don't have that item." << endl;
 		}
 	}
 	else {

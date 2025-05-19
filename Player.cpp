@@ -120,6 +120,11 @@ void Player::use(const string& itemName) {
 void Player::take(const string& itemName) {
 	Entity* entity = getEntity(itemName);
 	if (auto item = dynamic_cast<Item*>(entity)) {
+		if (item->getItemType() == ItemTypes::CHEST) {
+			cout << "I cannot take that" << endl;
+			return;
+			// if item is a chest - do nothing
+		}
 		if (item->getName() == itemName) {
 			add(item);
 			cout << item->getDescription() << " added to inventory!" << endl;
@@ -136,21 +141,24 @@ void Player::take(const string& itemName) {
 void Player::drop(const string& itemName) {
 	Item* item = dynamic_cast<Item*>(getItem(itemName));
 
+	if (!item) {
+		cout << "You don't have that item." << endl;
+		return;
+		// if item not in inventory
+	}
+
 	if (item->getEquipped()) {
 		unequip(item->getName());
 		// if item is equipped - unequip it first
 	}
 
-	if (item != nullptr) {
+	if (item) {
 		getRoom()->add(item);
 		cout << item->getDescription() << " dropped!" << endl;
 		remove(item);
 		// if item is valid - add it to the room and remove from inventory
 	}
-	else {
-		cout << "I don't have that item." << endl;
-		// if item not in inventory
-	}
+	
 }
 
 void Player::equip(const string& itemName) {
@@ -295,7 +303,7 @@ void Player::open(const string& itemName) {
 		// show chest contents and interact with it
 	}
 	else {
-		cout << "I cannot open that" << endl;
+		cout << "You cannot open that" << endl;
 		// item is not a chest
 	}
 }
@@ -330,7 +338,7 @@ void Player::unlock(const string& name) {
 			// keyId != chest requiredId
 		}
 		
-		cout << "I don't have a key" << endl;
+		cout << "You don't have a key" << endl;
 		// no keys in inventory
 	}
 	else if (auto exit = dynamic_cast<Exit*>(entity)) {
@@ -354,11 +362,11 @@ void Player::unlock(const string& name) {
 			// keyId != chest requiredId
 		}
 
-		cout << "I don't have a key" << endl;
+		cout << "You don't have a key" << endl;
 		// no keys in inventory
 	}
 
-	cout << "I can't unlock that!" << endl;
+	cout << "You can't unlock that!" << endl;
 	// entity is not a chest or an exit
 }
 
@@ -393,7 +401,7 @@ void Player::lock(const string& name) {
 			// keyId != chest requiredId
 		}
 
-		cout << "I don't have a key" << endl;
+		cout << "You don't have a key" << endl;
 		// no keys in inventory
 	}
 
@@ -417,11 +425,11 @@ void Player::lock(const string& name) {
 			// keyId != exit requiredId
 		}
 
-		cout << "I don't have a key" << endl;
+		cout << "You don't have a key" << endl;
 		// no keys in inventory
 	}
 
-	cout << "I can't lock that!" << endl;
+	cout << "You can't lock that!" << endl;
 	// entity not lockable
 }
 
